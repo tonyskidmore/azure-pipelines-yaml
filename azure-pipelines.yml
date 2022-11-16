@@ -10,18 +10,16 @@ variables:
 pool:
   name: 'vmss-agent-pool-linux-001'
 
-
 resources:
   containers:
-    - container: azure-tools
+    - container: ubuntu20_04
       image: '${{ variables.containerImage }}'
-      # options: "--user 0:0 --name azure-tools"
 
 jobs:
   - job: test
     displayName: "Test Container Job"
     continueOnError: false
-    container: azure-tools
+    container: ubuntu20_04
 
     steps:
 
@@ -31,4 +29,3 @@ jobs:
           source /etc/os-release
           printf "Running on: %s\n" "$PRETTY_NAME"
         displayName: Check operating system version
-
