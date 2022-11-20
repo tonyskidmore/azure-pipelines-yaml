@@ -7,7 +7,7 @@ trigger: none
 variables:
 - group: build
 - name: containerImage
-  value: "ghcr.io/tonyskidmore/azure-tools:latest"
+  value: "ubuntu:22.04"
 
 pool:
   name: 'vmss-bootstrap-pool'
@@ -37,6 +37,6 @@ jobs:
           echo "Build index: $(build_index)"
         displayName: Check build index
 
-      - script: |
-          terraform version
-        displayName: Terraform version
+      # - script: |
+      #     terraform version
+      #   displayName: Terraform version
