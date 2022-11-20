@@ -7,7 +7,7 @@ trigger: none
 variables:
 - group: build
 - name: containerImage
-  value: "hashicorp/terraform"
+  value: "ghcr.io/tonyskidmore/azure-tools:latest"
 
 pool:
   name: 'vmss-bootstrap-pool'
