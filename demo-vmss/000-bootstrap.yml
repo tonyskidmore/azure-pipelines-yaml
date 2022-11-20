@@ -7,10 +7,11 @@ trigger: none
 variables:
 - group: build
 - name: containerImage
-  value: "ubuntu:20.04"
+  value: "hashicorp/terraform"
 
 pool:
   name: 'vmss-bootstrap-pool'
+
 
 resources:
   containers:
@@ -35,3 +36,7 @@ jobs:
       - script: |
           echo "Build index: $(build_index)"
         displayName: Check build index
+
+      - script: |
+          terraform version
+        displayName: Terraform version
