@@ -27,7 +27,7 @@ jobs:
     steps:
 
       - checkout: self
-      - checkout: module # git://demo-vmss/module
+      - checkout: git://$(project)/module
 
       - script: |
           source /etc/os-release
@@ -50,3 +50,8 @@ jobs:
       - script: |
           terraform version
         displayName: Terraform version
+
+      - script: |
+          env
+          ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+        displayName: Debug
