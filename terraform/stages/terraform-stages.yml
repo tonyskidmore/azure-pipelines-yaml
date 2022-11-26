@@ -1,0 +1,22 @@
+---
+
+parameters:
+  - name: poolName
+    type: string
+  - name: environment
+    type: string
+  - name: stages
+    type: object
+  - name: stageParameters
+    type: object
+
+stages:
+
+  - ${{ each stage in parameters.stages }}:
+    - template: ../stages/terraform-run-stage.yml
+      parameters:
+        poolName: ${{ parameters.poolName }}
+        stageName: ${{ parameters.stageParameters[stage].stageName }}
+        environmentName: ${{ parameters.environment }}
+        condition: ${{ parameters.stageParameters[stage].condition }}
+        dependsOn: ${{ parameters.stageParameters[stage].dependsOn }}

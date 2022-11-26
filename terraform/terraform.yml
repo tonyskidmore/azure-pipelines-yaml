@@ -1,0 +1,48 @@
+---
+
+parameters:
+  - name: poolName
+    type: string
+    default: 'Azure Pipelines'
+  - name: environments
+    type: object
+    default:
+      - dev
+  - name: stages
+    type: object
+    default:
+      - init
+      - plan
+      - apply
+  - name: stageParameters
+    type: object
+    default:
+      init:
+        dependsOn: []
+        # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+        condition: succeeded()
+        stageName: "init"
+      plan:
+        dependsOn: [init]
+        # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+        condition: succeeded()
+        stageName: "init"
+      apply:
+        dependsOn: [init, plan]
+        # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+        condition: succeeded()
+        stageName: "apply"
+      destroy:
+        dependsOn: [init, plan]
+        # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+        condition: succeeded()
+        stageName: "destroy"
+
+stages:
+
+  - template: ../stages/terraform-environments.yml
+    parameters:
+      environments: ${{ parameters.environments }}
+      stages: ${{ parameters.stages }}
+      stageParameters: ${{ parameters.stageParameters }}
+      poolName: ${{ parameters.poolName }}

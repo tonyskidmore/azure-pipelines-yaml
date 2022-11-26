@@ -1,0 +1,32 @@
+---
+
+parameters:
+  - name: poolName
+    type: string
+  - name: dependsOn
+    type: object
+  - name: environmentName
+    type: string
+  - name: condition
+    type: string
+  - name: stageName
+    type: string
+
+
+stages:
+  - stage: ${{ parameters.environmentName }}_${{ parameters.stageName }}
+    # displayName: upper(parameters.targetEnvironmentName)
+    dependsOn: ${{ parameters.dependsOn }}
+    condition: ${{ parameters.condition }}
+    jobs:
+      - deployment: deployment
+        # timeoutInMinutes: ${{ parameters.timeoutInMinutes }}
+        pool: ${{ parameters.poolName }}
+        environment: ${{ parameters.environmentName }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: |
+                    echo "Would run template here"
+                  displayName: Test
