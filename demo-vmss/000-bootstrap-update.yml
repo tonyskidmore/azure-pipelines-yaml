@@ -7,7 +7,7 @@ trigger: none
 variables:
 - group: build
 - name: containerImage
-  value: "mcr.microsoft.com/azure-cloudshell:latest"
+  value: "ghcr.io/tonyskidmore/azure-tools:latest"
 
 pool:
   name: 'vmss-bootstrap-pool'
