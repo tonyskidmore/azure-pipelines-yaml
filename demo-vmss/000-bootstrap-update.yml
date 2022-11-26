@@ -9,8 +9,8 @@ parameters:
   default: plan-apply
   values:
   - first-time-only
-  - plan-apply
-  - destroy
+  - terraform-plan-apply
+  - terraform-destroy
 
 trigger: none
 
@@ -29,7 +29,9 @@ resources:
       image: '${{ variables.containerImage }}'
 
 stages:
+# - ${{ if eq(parameters.operation, 'first-time-only') }}:
 - stage: update
+  condition: - eq(parameters.operation, 'first-time-only')
 
   jobs:
     - job: update
