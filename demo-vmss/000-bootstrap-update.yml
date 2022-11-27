@@ -6,7 +6,7 @@ parameters:
 - name: operation
   displayName: Bootstrap Operation
   type: string
-  default: plan-apply
+  default: terraform-plan-apply
   values:
   - first-time-only
   - terraform-plan-apply
@@ -31,7 +31,7 @@ resources:
 stages:
 # - ${{ if eq(parameters.operation, 'first-time-only') }}:
 - stage: update
-  condition: - eq(parameters.operation, 'first-time-only')
+  condition: eq('${{ parameters.operation }}', 'first-time-only')
 
   jobs:
     - job: update
@@ -46,11 +46,10 @@ stages:
             ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
           displayName: Debug
 
-- stage: apply
-
-  - template: terraform/terraform.yml
-    parameters:
-      poolName: 'vmss-bootstrap-pool'
+- template: ../terraform/terraform.yml
+  parameters:
+    poolName: 'vmss-bootstrap-pool'
+    dependsOn: update
 
   # jobs:
   #   - job: apply

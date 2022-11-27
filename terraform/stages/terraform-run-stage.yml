@@ -5,6 +5,8 @@ parameters:
     type: string
   - name: dependsOn
     type: object
+  - name: parentDependsOn
+    type: object
   - name: environmentName
     type: string
   - name: condition
@@ -16,7 +18,12 @@ parameters:
 stages:
   - stage: ${{ parameters.environmentName }}_${{ parameters.stageName }}
     # displayName: upper(parameters.targetEnvironmentName)
-    dependsOn: ${{ parameters.dependsOn }}
+    # dependsOn: ${{ parameters.dependsOn }}
+    dependsOn:
+    - ${{ each depParent in parameters.parentDependsOn }}:
+      - ${{ depParent }}
+    - ${{ each dep in parameters.dependsOn }}:
+      - ${{ parameters.environmentName }}_${{ dep }}
     condition: ${{ parameters.condition }}
     jobs:
       - deployment: deployment
