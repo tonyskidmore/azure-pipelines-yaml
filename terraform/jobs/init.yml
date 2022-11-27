@@ -1,0 +1,26 @@
+---
+
+parameters:
+  - name: terraformVersions
+    type: string
+    default: latest
+
+jobs:
+  - job: init
+    steps:
+
+      checkout: self
+      # checkout: module
+
+      - script: |
+          env
+          ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+        displayName: Debug
+
+# - task: Bash@3
+#   inputs:
+#     filePath: 'test.sh'
+#     arguments: 'arg1'
+#     workingDirectory: '$(System.WorkingDirectory)/pipelines/terraform/scripts'
+#     failOnStderr: true
+#     bashEnvValue: 'tony=good'

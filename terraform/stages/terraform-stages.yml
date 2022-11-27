@@ -22,6 +22,7 @@ stages:
     - template: ../stages/terraform-run-stage.yml
       parameters:
         poolName: ${{ parameters.poolName }}
+        stage: ${{ stage }}
         stageName: ${{ parameters.stageParameters[stage].stageName }}
         environment: ${{ parameters.environment }}
         environmentName: ${{ parameters.environmentName }}
