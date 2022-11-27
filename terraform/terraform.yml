@@ -7,7 +7,7 @@ parameters:
   - name: environments
     type: object
     default:
-      - dev
+      - demo
   - name: stages
     type: object
     default:
