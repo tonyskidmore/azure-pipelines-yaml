@@ -50,4 +50,4 @@ stages:
       stages: ${{ parameters.stages }}
       stageParameters: ${{ parameters.stageParameters }}
       poolName: ${{ parameters.poolName }}
-      poolName: ${{ parameters.poolName }}
+      dependsOn: ${{ dependsOn.poolName }}
