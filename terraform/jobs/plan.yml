@@ -12,7 +12,7 @@ jobs:
     steps:
 
       # - checkout: self
-      # - checkout: module
+      # - checkout: git://$(project)/module
 
       - script: |
           env

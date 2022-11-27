@@ -35,6 +35,7 @@ stages:
           - ${{ depEnv }}_${{ dep }}
         - ${{ parameters.environmentName }}_${{ dep }}
     condition: ${{ parameters.condition }}
+    # TODO: combine init & plan
     jobs:
     - ${{ if eq(parameters['stage'], 'init') }}:
       - template: ../jobs/init.yml
@@ -42,6 +43,9 @@ stages:
       - template: ../jobs/plan.yml
     - ${{ if eq(parameters['stage'], 'apply') }}:
       - template: ../jobs/apply.yml
+        parameters:
+          poolName: ${{ parameters.poolName }}
+          environmentName: ${{ parameters.environmentName }}
       # ${{ elseif eq(parameters['stage'], 'plan') }}:
       #   - template: ../jobs/plan.yml
       # ${{ elseif eq(parameters['stage'], 'apply') }}:

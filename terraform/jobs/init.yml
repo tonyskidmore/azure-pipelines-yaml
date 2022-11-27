@@ -11,8 +11,8 @@ jobs:
   - job: init
     steps:
 
-      # - checkout: self
-      # - checkout: module
+      - checkout: self
+      - checkout: git://$(project)/module
 
       - script: |
           env
