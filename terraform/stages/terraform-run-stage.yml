@@ -7,8 +7,12 @@ parameters:
     type: object
   - name: parentDependsOn
     type: object
+  - name: environment
+    type: string
   - name: environmentName
     type: string
+  - name: environmentDependsOn
+    type: object
   - name: condition
     type: string
   - name: stageName
@@ -16,13 +20,15 @@ parameters:
 
 
 stages:
-  - stage: ${{ parameters.environmentName }}_${{ parameters.stageName }}
+  - stage: ${{ parameters.environment }}_${{ parameters.stageName }}
     # displayName: upper(parameters.targetEnvironmentName)
     # dependsOn: ${{ parameters.dependsOn }}
     dependsOn:
     - ${{ each depParent in parameters.parentDependsOn }}:
       - ${{ depParent }}
     - ${{ each dep in parameters.dependsOn }}:
+      - ${{ each depEnv in parameters.environmentDependsOn }}:
+        - ${{ depEnv }}_${{ dep }}
       - ${{ parameters.environmentName }}_${{ dep }}
     condition: ${{ parameters.condition }}
     jobs:

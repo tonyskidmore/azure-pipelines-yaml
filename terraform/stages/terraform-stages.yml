@@ -5,6 +5,10 @@ parameters:
     type: string
   - name: environment
     type: string
+  - name: environmentName
+    type: string
+  - name: environmentDependsOn
+    type: object
   - name: dependsOn
     type: object
   - name: stages
@@ -19,7 +23,9 @@ stages:
       parameters:
         poolName: ${{ parameters.poolName }}
         stageName: ${{ parameters.stageParameters[stage].stageName }}
-        environmentName: ${{ parameters.environment }}
+        environment: ${{ parameters.environment }}
+        environmentName: ${{ parameters.environmentName }}
+        environmentDependsOn: ${{ parameters.environmentDependsOn }}
         condition: ${{ parameters.stageParameters[stage].condition }}
         parentDependsOn: ${{ parameters.dependsOn }}
         dependsOn: ${{ parameters.stageParameters[stage].dependsOn }}

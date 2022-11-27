@@ -8,6 +8,21 @@ parameters:
     type: object
     default:
       - demo
+  - name: environmentParameters
+    type: object
+    default:
+      demo:
+        dependsOn: []
+        environmentName: "demo"
+      dev:
+        dependsOn: []
+        environmentName: "dev"
+      test:
+        dependsOn: [dev]
+        environmentName: "test"
+      prod:
+        dependsOn: [dev, test]
+        environmentName: "prod"
   - name: dependsOn
     type: object
     default: []
@@ -46,8 +61,8 @@ stages:
   - template: stages/terraform-environments.yml
     parameters:
       environments: ${{ parameters.environments }}
+      environmentParameters: ${{ parameters.environmentParameters }}
       dependsOn: ${{ parameters.dependsOn }}
       stages: ${{ parameters.stages }}
       stageParameters: ${{ parameters.stageParameters }}
       poolName: ${{ parameters.poolName }}
-      dependsOn: ${{ dependsOn.poolName }}
