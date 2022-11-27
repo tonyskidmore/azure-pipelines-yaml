@@ -5,12 +5,14 @@ parameters:
     type: string
     default: latest
 
+
+
 jobs:
   - job: init
     steps:
 
-      checkout: self
-      # checkout: module
+      # - checkout: self
+      # - checkout: module
 
       - script: |
           env

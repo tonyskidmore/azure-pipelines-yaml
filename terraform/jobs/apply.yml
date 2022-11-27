@@ -1,24 +1,45 @@
 ---
 
 parameters:
-  - name: environmentName
-    type: string
-  - name: poolName
-    type: string
   - name: terraformVersions
     type: string
     default: latest
 
+
+
 jobs:
-  - deployment: deployment
-    # timeoutInMinutes: ${{ parameters.timeoutInMinutes }}
-    pool: ${{ parameters.poolName }}
-    environment: ${{ parameters.environmentName }}
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-            - script: |
-                env
-                ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-              displayName: Debug
+  - job: apply
+    steps:
+
+      # - checkout: self
+      # - checkout: module
+
+      - script: |
+          env
+          ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+        displayName: Debug
+
+# ---
+
+# parameters:
+#   - name: environmentName
+#     type: string
+#   - name: poolName
+#     type: string
+#   - name: terraformVersions
+#     type: string
+#     default: latest
+
+# jobs:
+#   - deployment: deployment
+#     # timeoutInMinutes: ${{ parameters.timeoutInMinutes }}
+#     pool: ${{ parameters.poolName }}
+#     environment: ${{ parameters.environmentName }}
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#             - script: |
+#                 env
+#                 ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+#               displayName: Debug
