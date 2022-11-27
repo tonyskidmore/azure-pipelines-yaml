@@ -48,40 +48,46 @@ stages:
 
 - stage: apply
 
-  jobs:
-    - job: apply
-      displayName: "Apply Terraform Code"
-      continueOnError: false
-      container: ubuntu20_04
+  - template: terraform/terraform.yml
+    parameters:
+      poolName: 'vmss-bootstrap-pool'
 
-      steps:
+  # jobs:
+  #   - job: apply
+  #     displayName: "Apply Terraform Code"
+  #     continueOnError: false
+  #     container: ubuntu20_04
 
-        - checkout: self
-        - checkout: git://$(project)/module
 
-        - script: |
-            source /etc/os-release
-            printf "Running on: %s\n" "$PRETTY_NAME"
-          displayName: Check operating system version
 
-        - script: |
-            echo "Build index: $(build_index)"
-          displayName: Check build index
+  #     steps:
 
-        - script: |
-            set -e
-            TERRAFORM_VERSION=$(curl --silent --show-error https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r .current_version)
-            wget --quiet https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-            unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-            rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-            sudo mv terraform /usr/bin
-          displayName: Install latest Terraform
+  #       - checkout: self
+  #       - checkout: git://$(project)/module
 
-        - script: |
-            terraform version
-          displayName: Terraform version
+  #       - script: |
+  #           source /etc/os-release
+  #           printf "Running on: %s\n" "$PRETTY_NAME"
+  #         displayName: Check operating system version
 
-        - script: |
-            env
-            ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-          displayName: Debug
+  #       - script: |
+  #           echo "Build index: $(build_index)"
+  #         displayName: Check build index
+
+  #       - script: |
+  #           set -e
+  #           TERRAFORM_VERSION=$(curl --silent --show-error https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r .current_version)
+  #           wget --quiet https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+  #           unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+  #           rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+  #           sudo mv terraform /usr/bin
+  #         displayName: Install latest Terraform
+
+  #       - script: |
+  #           terraform version
+  #         displayName: Terraform version
+
+  #       - script: |
+  #           env
+  #           ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+  #         displayName: Debug
