@@ -35,23 +35,23 @@ parameters:
   - name: stageParameters
     type: object
     default:
-      init:
+      init_plan:
         dependsOn: []
         # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
         condition: succeeded()
-        stageName: "init"
-      plan:
-        dependsOn: [init]
-        # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
-        condition: succeeded()
-        stageName: "plan"
+        stageName: "init_plan"
+      # plan:
+      #   dependsOn: [init]
+      #   # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+      #   condition: succeeded()
+      #   stageName: "plan"
       apply:
-        dependsOn: [init, plan]
+        dependsOn: [init_plan]
         # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
         condition: succeeded()
         stageName: "apply"
       destroy:
-        dependsOn: [init, plan]
+        dependsOn: [init_plan]
         # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
         condition: succeeded()
         stageName: "destroy"

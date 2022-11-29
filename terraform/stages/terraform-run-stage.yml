@@ -24,37 +24,27 @@ parameters:
 stages:
   - stage: ${{ parameters.environment }}_${{ parameters.stageName }}
     # displayName: upper(parameters.targetEnvironmentName)
-    # dependsOn: ${{ parameters.dependsOn }}
     pool:
       name: ${{ parameters.poolName }}
     dependsOn:
       - ${{ each depParent in parameters.parentDependsOn }}:
         - ${{ depParent }}
-      - ${{ each dep in parameters.dependsOn }}:
-        - ${{ each depEnv in parameters.environmentDependsOn }}:
+      - ${{ each depEnv in parameters.environmentDependsOn }}:
+        - ${{ each dep in parameters.dependsOn }}:
           - ${{ depEnv }}_${{ dep }}
+      - ${{ each dep in parameters.dependsOn }}:
         - ${{ parameters.environmentName }}_${{ dep }}
     condition: ${{ parameters.condition }}
-    # TODO: combine init & plan
     jobs:
-    - ${{ if eq(parameters['stage'], 'init') }}:
-      - template: ../jobs/init.yml
-    - ${{ if eq(parameters['stage'], 'plan') }}:
-      - template: ../jobs/plan.yml
+    - ${{ if eq(parameters['stage'], 'init_plan') }}:
+      - template: ../jobs/init_plan.yml
     - ${{ if eq(parameters['stage'], 'apply') }}:
       - template: ../jobs/apply.yml
         parameters:
           poolName: ${{ parameters.poolName }}
           environmentName: ${{ parameters.environmentName }}
-      # ${{ elseif eq(parameters['stage'], 'plan') }}:
-      #   - template: ../jobs/plan.yml
-      # ${{ elseif eq(parameters['stage'], 'apply') }}:
-      #   - template: ../jobs/apply.yml
-      # - template: ../jobs/init.yml
-
-      # - ${{ if eq(parameters['stage'], 'init') }}:
-      #     - template: ../jobs/init.yml
-      #   ${{ elseif eq(parameters['stage'], 'plan') }}:
-      #     - template: ../jobs/plan.yml
-      #   ${{ elseif eq(parameters['stage'], 'apply') }}:
-      #     - template: ../jobs/apply.yml
+    - ${{ if eq(parameters['stage'], 'destroy') }}:
+      - template: ../jobs/destroy.yml
+        parameters:
+          poolName: ${{ parameters.poolName }}
+          environmentName: ${{ parameters.environmentName }}
