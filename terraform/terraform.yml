@@ -29,8 +29,7 @@ parameters:
   - name: stages
     type: object
     default:
-      - init
-      - plan
+      - init_plan
       - apply
   - name: stageParameters
     type: object

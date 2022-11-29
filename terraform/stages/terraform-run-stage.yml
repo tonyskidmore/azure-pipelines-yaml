@@ -48,3 +48,11 @@ stages:
         parameters:
           poolName: ${{ parameters.poolName }}
           environmentName: ${{ parameters.environmentName }}
+
+    # dependsOn:
+    #   - ${{ each depParent in parameters.parentDependsOn }}:
+    #     - ${{ depParent }}
+    #   - ${{ each dep in parameters.dependsOn }}:
+    #     - ${{ each depEnv in parameters.environmentDependsOn }}:
+    #       - ${{ depEnv }}_${{ dep }}
+    #     - ${{ parameters.environmentName }}_${{ dep }}
