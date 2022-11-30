@@ -1,24 +1,3 @@
-# ---
-
-# parameters:
-#   - name: terraformVersions
-#     type: string
-#     default: latest
-
-
-
-# jobs:
-#   - job: apply
-#     steps:
-
-#       # - checkout: self
-#       # - checkout: module
-
-#       - script: |
-#           env
-#           ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-#         displayName: Debug
-
 ---
 
 parameters:
@@ -40,8 +19,6 @@ jobs:
         deploy:
           steps:
 
-            # - checkout: self
-            # - checkout: git://$(project)/module
             - script: |
                 env
                 ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"

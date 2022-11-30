@@ -23,8 +23,6 @@ parameters:
     type: string
   - name: stageName
     type: string
-  - name: checkout
-    type: object
   - name: terraformDirectory
     type: string
   - name: terraformTfVars
