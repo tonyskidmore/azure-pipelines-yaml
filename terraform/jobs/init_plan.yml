@@ -3,7 +3,9 @@
 parameters:
   - name: terraformVersion
     type: string
-    default: latest
+    default: 'latest'
+  - name: terraformDirectory
+    type: string
   - name: checkout
     type: object
 
@@ -15,4 +17,5 @@ jobs:
       - template: ../steps/terraform-init.yml
         parameters:
           terraformVersion: ${{ parameters.terraformVersion }}
-          checkout: ${{ parameters.terraformVersion }}
+          checkout: ${{ parameters.checkout }}
+          terraformDirectory: ${{ parameters.terraformDirectory }}

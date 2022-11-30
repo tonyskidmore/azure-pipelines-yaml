@@ -15,6 +15,8 @@ parameters:
     type: object
   - name: stageParameters
     type: object
+  - name: terraformDirectory
+    type: string
 
 stages:
 
@@ -31,3 +33,4 @@ stages:
         parentDependsOn: ${{ parameters.dependsOn }}
         dependsOn: ${{ parameters.stageParameters[stage].dependsOn }}
         checkout: ${{ parameters.stageParameters[stage].checkout }}
+        terraformDirectory: ${{ parameters.terraformDirectory }}

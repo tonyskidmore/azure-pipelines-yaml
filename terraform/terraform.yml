@@ -1,9 +1,9 @@
 ---
 
 parameters:
-  - name: poolName
-    type: string
-    default: 'Azure Pipelines'
+  - name: dependsOn
+    type: object
+    default: []
   - name: environments
     type: object
     default:
@@ -23,9 +23,9 @@ parameters:
       prod:
         dependsOn: [dev, test]
         environmentName: "prod"
-  - name: dependsOn
-    type: object
-    default: []
+  - name: poolName
+    type: string
+    default: 'Azure Pipelines'
   - name: stages
     type: object
     default:
@@ -57,6 +57,8 @@ parameters:
         # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
         condition: succeeded()
         stageName: "destroy"
+  - name: terraformDirectory
+    type: string
 
 stages:
 
@@ -68,3 +70,4 @@ stages:
       stages: ${{ parameters.stages }}
       stageParameters: ${{ parameters.stageParameters }}
       poolName: ${{ parameters.poolName }}
+      terraformDirectory: ${{ parameters.terraformDirectory }}

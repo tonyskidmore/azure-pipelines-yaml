@@ -21,6 +21,8 @@ parameters:
     type: string
   - name: checkout
     type: object
+  - name: terraformDirectory
+    type: string
 
 
 stages:
@@ -28,6 +30,7 @@ stages:
     # displayName: upper(parameters.targetEnvironmentName)
     pool:
       name: ${{ parameters.poolName }}
+      terraformDirectory: ${{ parameters.terraformDirectory }}
     dependsOn:
       - ${{ each depParent in parameters.parentDependsOn }}:
         - ${{ depParent }}
