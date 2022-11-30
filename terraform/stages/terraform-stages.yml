@@ -13,6 +13,8 @@ parameters:
     type: object
   - name: dependsOn
     type: object
+  - name: initCheckout
+    type: object
   - name: stages
     type: object
   - name: stageParameters
@@ -37,6 +39,6 @@ stages:
         condition: ${{ parameters.stageParameters[stage].condition }}
         parentDependsOn: ${{ parameters.dependsOn }}
         dependsOn: ${{ parameters.stageParameters[stage].dependsOn }}
-        checkout: ${{ parameters.stageParameters[stage].checkout }}
+        initCheckout: ${{ parameters.initCheckout }}
         terraformDirectory: ${{ parameters.terraformDirectory }}
         terraformTfVars: ${{ parameters.terraformTfVars }}

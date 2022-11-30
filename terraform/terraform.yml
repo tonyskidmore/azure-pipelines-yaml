@@ -44,7 +44,6 @@ parameters:
         dependsOn: []
         # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
         condition: succeeded()
-        checkout: ${{ parameters.initCheckout }}
         stageName: "init_plan"
       # plan:
       #   dependsOn: [init]
@@ -75,6 +74,7 @@ stages:
       environments: ${{ parameters.environments }}
       environmentParameters: ${{ parameters.environmentParameters }}
       dependsOn: ${{ parameters.dependsOn }}
+      initCheckout: ${{ parameters.initCheckout }}
       stages: ${{ parameters.stages }}
       stageParameters: ${{ parameters.stageParameters }}
       poolName: ${{ parameters.poolName }}

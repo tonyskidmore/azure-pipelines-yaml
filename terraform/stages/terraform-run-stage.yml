@@ -7,6 +7,8 @@ parameters:
     type: string
   - name: dependsOn
     type: object
+  - name: initCheckout
+    type: object
   - name: parentDependsOn
     type: object
   - name: environment
@@ -48,7 +50,7 @@ stages:
       - template: ../jobs/init_plan.yml
         parameters:
           container: ${{ parameters.container }}
-          checkout: ${{ parameters.checkout}}
+          checkout: ${{ parameters.initCheckout }}
           poolName: ${{ parameters.poolName }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
           terraformTfVars: ${{ parameters.terraformTfVars }}
