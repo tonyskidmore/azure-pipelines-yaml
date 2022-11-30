@@ -1,28 +1,48 @@
+# ---
+
+# parameters:
+#   - name: terraformVersions
+#     type: string
+#     default: latest
+
+
+
+# jobs:
+#   - job: apply
+#     steps:
+
+#       # - checkout: self
+#       # - checkout: module
+
+#       - script: |
+#           env
+#           ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+#         displayName: Debug
+
 ---
 
 parameters:
+  - name: environmentName
+    type: string
+  - name: poolName
+    type: string
   - name: terraformVersions
     type: string
     default: latest
 
-
-
 jobs:
-  - job: init
-    steps:
+  - deployment: deployment
+    # timeoutInMinutes: ${{ parameters.timeoutInMinutes }}
+    pool: ${{ parameters.poolName }}
+    environment: ${{ parameters.environmentName }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
 
-      # - checkout: self
-      # - checkout: git://$(project)/module
-
-      - script: |
-          env
-          ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-        displayName: Debug
-
-# - task: Bash@3
-#   inputs:
-#     filePath: 'test.sh'
-#     arguments: 'arg1'
-#     workingDirectory: '$(System.WorkingDirectory)/pipelines/terraform/scripts'
-#     failOnStderr: true
-#     bashEnvValue: 'tony=good'
+            # - checkout: self
+            # - checkout: git://$(project)/module
+            - script: |
+                env
+                ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+              displayName: Debug
