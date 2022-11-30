@@ -5,6 +5,8 @@ parameters:
     type: object
   - name: container
     type: string
+  - name: poolName
+    type: string
   - name: terraformVersion
     type: string
     default: 'latest'
@@ -17,7 +19,7 @@ parameters:
 jobs:
   - job: init
     pool: ${{ parameters.poolName }}
-    if ${{ gt(length(parameters.container),0) }}:
+    ${{ if gt(length(parameters.container),0) }}:
       container: ${{ parameters.container }}
     steps:
       - template: ../steps/terraform-init.yml
