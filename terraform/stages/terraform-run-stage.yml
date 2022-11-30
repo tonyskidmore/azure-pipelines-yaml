@@ -30,7 +30,6 @@ stages:
     # displayName: upper(parameters.targetEnvironmentName)
     pool:
       name: ${{ parameters.poolName }}
-    terraformDirectory: ${{ parameters.terraformDirectory }}
     dependsOn:
       - ${{ each depParent in parameters.parentDependsOn }}:
         - ${{ depParent }}
@@ -45,6 +44,7 @@ stages:
       - template: ../jobs/init_plan.yml
         parameters:
           checkout: ${{ parameters.checkout}}
+          terraformDirectory: ${{ parameters.terraformDirectory }}
     - ${{ if eq(parameters['stage'], 'apply') }}:
       - template: ../jobs/apply.yml
         parameters:
