@@ -28,4 +28,4 @@ stages:
         dependsOn: ${{ parameters.dependsOn }}
         stages: ${{ parameters.stages }}
         stageParameters: ${{ parameters.stageParameters }}
-         terraformDirectory: ${{ parameters.terraformDirectory }}
+        terraformDirectory: ${{ parameters.terraformDirectory }}

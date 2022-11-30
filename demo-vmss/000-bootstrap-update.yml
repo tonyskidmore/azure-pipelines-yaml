@@ -51,6 +51,7 @@ stages:
     poolName: 'vmss-bootstrap-pool'
     dependsOn:
       - update
+    terraformDirectory: '$(System.DefaultWorkingDirectory)/module/demo_environment'
 
   # jobs:
   #   - job: apply
