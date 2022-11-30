@@ -47,6 +47,7 @@ steps:
       scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-init.sh'
       arguments: '${{ parameters.terraformDirectory }}'
       workingDirectory: '${{ parameters.terraformDirectory }}'
+      addSpnToEnvironment: true
     displayName: 'Run terraform init'
     env:
       ${{ parameters.terraformTfVars}}
