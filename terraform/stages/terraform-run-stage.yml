@@ -30,7 +30,7 @@ stages:
     # displayName: upper(parameters.targetEnvironmentName)
     pool:
       name: ${{ parameters.poolName }}
-      terraformDirectory: ${{ parameters.terraformDirectory }}
+    terraformDirectory: ${{ parameters.terraformDirectory }}
     dependsOn:
       - ${{ each depParent in parameters.parentDependsOn }}:
         - ${{ depParent }}
