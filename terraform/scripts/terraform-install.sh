@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -uo pipefail
 
 # functions
 
@@ -103,12 +103,16 @@ then
   tf_require_version=$(echo "$out" | jq -r '.current_version')
 fi
 
+echo "Checking if terraform is installed"
 check_command "terraform"
 if [[ ${cmd_installed} -eq 0 ]]
 then
   echo "Terraform not currently installed, installing "
   install_teraform "$tf_require_version"
+else
+  echo "Terraform already installed"
 fi
+
 
 tf_version=$(terraform version -json | jq -r '.terraform_version')
 
@@ -121,3 +125,5 @@ else
   echo "Currently installed Terraform does not satisfy requirements, installing "
   install_teraform "$tf_require_version"
 fi
+
+terraform version
