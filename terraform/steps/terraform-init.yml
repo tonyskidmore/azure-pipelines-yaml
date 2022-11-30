@@ -36,7 +36,7 @@ steps:
       filePath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-install.sh'
       arguments: '${{ parameters.terraformVersion }}'
       workingDirectory: '${{ parameters.terraformDirectory }}'
-      failOnStderr: true
+      # failOnStderr: true
       # bashEnvValue: 'tony=good'
     displayName: 'Install Terraform: ${{ parameters.terraformVersion }}'
 
