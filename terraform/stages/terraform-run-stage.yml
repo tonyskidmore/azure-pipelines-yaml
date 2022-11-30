@@ -19,6 +19,8 @@ parameters:
     type: string
   - name: stageName
     type: string
+  - name: checkout
+    type: object
 
 
 stages:
@@ -38,6 +40,9 @@ stages:
     jobs:
     - ${{ if eq(parameters['stage'], 'init_plan') }}:
       - template: ../jobs/init_plan.yml
+        parameters:
+          environmentName: ${{ parameters.environmentName }}
+          checkout: ${{ parameters.checkout}}
     - ${{ if eq(parameters['stage'], 'apply') }}:
       - template: ../jobs/apply.yml
         parameters:

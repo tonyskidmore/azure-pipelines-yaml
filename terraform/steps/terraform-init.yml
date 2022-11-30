@@ -1,0 +1,29 @@
+---
+
+parameters:
+  - name: terraformVersion
+    type: string
+    default: latest
+  - name: checkout
+    type: object
+
+steps:
+
+  - ${{ if gt(length(parameters.checkout), 1) }}:
+    - ${{ each repo in parameters.stages }}:
+      - checkout: ${{ repo }}
+  - ${{ else }}:
+    - checkout: self
+
+  - script: |
+      env
+      ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+    displayName: Debug
+
+# - task: Bash@3
+#   inputs:
+#     filePath: 'test.sh'
+#     arguments: 'arg1'
+#     workingDirectory: '$(System.WorkingDirectory)/pipelines/terraform/scripts'
+#     failOnStderr: true
+#     bashEnvValue: 'tony=good'

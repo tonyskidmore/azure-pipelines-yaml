@@ -38,6 +38,9 @@ parameters:
         dependsOn: []
         # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
         condition: succeeded()
+        checkout:
+          - self
+          - git://$(project)/module
         stageName: "init_plan"
       # plan:
       #   dependsOn: [init]

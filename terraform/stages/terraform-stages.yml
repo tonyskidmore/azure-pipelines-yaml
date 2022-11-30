@@ -30,3 +30,4 @@ stages:
         condition: ${{ parameters.stageParameters[stage].condition }}
         parentDependsOn: ${{ parameters.dependsOn }}
         dependsOn: ${{ parameters.stageParameters[stage].dependsOn }}
+        checkout: ${{ parameters.stageParameters[stage].checkout }}
