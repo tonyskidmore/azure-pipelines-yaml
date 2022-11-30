@@ -1,6 +1,8 @@
 ---
 
 parameters:
+  - name: container
+    type: string
   - name: poolName
     type: string
   - name: environment
@@ -17,12 +19,15 @@ parameters:
     type: object
   - name: terraformDirectory
     type: string
+  - name: terraformTfVars
+    type: object
 
 stages:
 
   - ${{ each stage in parameters.stages }}:
     - template: ../stages/terraform-run-stage.yml
       parameters:
+        container: ${{ parameters.container }}
         poolName: ${{ parameters.poolName }}
         stage: ${{ stage }}
         stageName: ${{ parameters.stageParameters[stage].stageName }}
@@ -34,3 +39,4 @@ stages:
         dependsOn: ${{ parameters.stageParameters[stage].dependsOn }}
         checkout: ${{ parameters.stageParameters[stage].checkout }}
         terraformDirectory: ${{ parameters.terraformDirectory }}
+        terraformTfVars: ${{ parameters.terraformTfVars }}

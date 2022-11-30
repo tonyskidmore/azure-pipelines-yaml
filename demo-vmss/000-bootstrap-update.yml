@@ -48,9 +48,13 @@ stages:
 
 - template: ../terraform/terraform.yml
   parameters:
-    poolName: 'vmss-bootstrap-pool'
+    container: ubuntu20_04
+    initCheckout:
+      - self
+      - git://$(project)/module
     dependsOn:
       - update
+    poolName: 'vmss-bootstrap-pool'
     terraformDirectory: '$(System.DefaultWorkingDirectory)/module/demo_environment'
 
   # jobs:

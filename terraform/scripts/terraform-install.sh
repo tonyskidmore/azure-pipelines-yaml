@@ -37,7 +37,8 @@ build_params() {
           "--connect-timeout" "$HTTP_CONNECT_TIMEOUT" \
           "--write-out" "\n%{http_code}" \
           "--header" "Content-Type: application/json" \
-          "--request" "$method"
+          "--request" "$method" \
+          "$url"
   )
 
 }

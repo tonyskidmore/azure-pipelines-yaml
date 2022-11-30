@@ -7,6 +7,8 @@ parameters:
     type: string
   - name: checkout
     type: object
+  - name: terraformTfVars
+    type: object
 
 steps:
 
@@ -26,21 +28,25 @@ steps:
       env
       ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
     displayName: Debug
+    env:
+      ${{ parameters.terraformTfVars}}
 
   - task: Bash@3
     inputs:
-      filePath: 'terraform-install.sh'
+      filePath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-install.sh'
       arguments: '${{ parameters.terraformVersion }}'
-      workingDirectory: '$(System.WorkingDirectory)/pipelines/terraform/scripts'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
       failOnStderr: true
       # bashEnvValue: 'tony=good'
     displayName: 'Install Terraform: ${{ parameters.terraformVersion }}'
 
   - task: Bash@3
     inputs:
-      filePath: 'terraform-init.sh'
+      filePath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-init.sh'
       arguments: '${{ parameters.terraformDirectory }}'
-      workingDirectory: '$(System.WorkingDirectory)/pipelines/terraform/scripts'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
       failOnStderr: true
       # bashEnvValue: 'tony=good'
     displayName: 'Run terraform init'
+    env:
+      ${{ parameters.terraformTfVars}}

@@ -1,6 +1,9 @@
 ---
 
 parameters:
+  - name: container
+    type: string
+    default: ''
   - name: dependsOn
     type: object
     default: []
@@ -23,6 +26,9 @@ parameters:
       prod:
         dependsOn: [dev, test]
         environmentName: "prod"
+  - name: initCheckout
+    type: object
+    default: []
   - name: poolName
     type: string
     default: 'Azure Pipelines'
@@ -38,9 +44,7 @@ parameters:
         dependsOn: []
         # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
         condition: succeeded()
-        checkout:
-          - self
-          - git://$(project)/module
+        checkout: ${{ parameters.initCheckout }}
         stageName: "init_plan"
       # plan:
       #   dependsOn: [init]
@@ -59,11 +63,15 @@ parameters:
         stageName: "destroy"
   - name: terraformDirectory
     type: string
+  - name: terraformTfVars
+    type: object
+    default: {}
 
 stages:
 
   - template: stages/terraform-environments.yml
     parameters:
+      container: ${{ parameters.container }}
       environments: ${{ parameters.environments }}
       environmentParameters: ${{ parameters.environmentParameters }}
       dependsOn: ${{ parameters.dependsOn }}
@@ -71,3 +79,4 @@ stages:
       stageParameters: ${{ parameters.stageParameters }}
       poolName: ${{ parameters.poolName }}
       terraformDirectory: ${{ parameters.terraformDirectory }}
+      terraformTfVars: ${{ parameters.terraformTfVars }}

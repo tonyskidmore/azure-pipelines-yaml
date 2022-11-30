@@ -1,6 +1,8 @@
 ---
 
 parameters:
+  - name: container
+    type: string
   - name: poolName
     type: string
   - name: dependsOn
@@ -23,6 +25,8 @@ parameters:
     type: object
   - name: terraformDirectory
     type: string
+  - name: terraformTfVars
+    type: object
 
 
 stages:
@@ -43,8 +47,11 @@ stages:
     - ${{ if eq(parameters['stage'], 'init_plan') }}:
       - template: ../jobs/init_plan.yml
         parameters:
+          container: ${{ parameters.container }}
           checkout: ${{ parameters.checkout}}
+          poolName: ${{ parameters.poolName }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
+          terraformTfVars: ${{ parameters.terraformTfVars }}
     - ${{ if eq(parameters['stage'], 'apply') }}:
       - template: ../jobs/apply.yml
         parameters:
