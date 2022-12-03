@@ -40,12 +40,12 @@ steps:
       # bashEnvValue: 'tony=good'
     displayName: 'Install Terraform: ${{ parameters.terraformVersion }}'
 
-  - task: Bash@3
-    inputs:
-      filePath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/azurecli-install.sh'
-      # arguments: '${{ parameters.azurecliVersion }}'
-      workingDirectory: '${{ parameters.terraformDirectory }}'
-    displayName: 'Install azure-cli'
+  # - task: Bash@3
+  #   inputs:
+  #     filePath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/azurecli-install.sh'
+  #     # arguments: '${{ parameters.azurecliVersion }}'
+  #     workingDirectory: '${{ parameters.terraformDirectory }}'
+  #   displayName: 'Install azure-cli'
 
   - task: AzureCLI@2
     inputs:
