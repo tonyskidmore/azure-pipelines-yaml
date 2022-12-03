@@ -41,8 +41,8 @@ stages:
 
       steps:
 
-        - checkout: self
-        - checkout: git://$(project)/module
+        # - checkout: self
+        # - checkout: git://$(project)/module
 
         - script: |
             env
