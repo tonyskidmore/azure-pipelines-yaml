@@ -86,6 +86,7 @@ install_teraform() {
   wget --quiet "https://releases.hashicorp.com/terraform/${tf_version}/terraform_${tf_version}_linux_amd64.zip"
   unzip "terraform_${tf_version}_linux_amd64.zip"
   rm "terraform_${tf_version}_linux_amd64.zip"
+  sudo cp terraform "$SYSTEM_DEFAULTWORKINGDIRECTORY"
   sudo mv terraform /usr/bin
 
 }

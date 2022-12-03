@@ -1,0 +1,40 @@
+---
+
+parameters:
+  - name: azureSubscription
+    type: string
+  - name: environmentName
+    type: string
+  - name: terraformDirectory
+    type: string
+  - name: terraformTfVars
+    type: object
+
+steps:
+
+  - checkout: none
+
+  - task: Cache@2
+    displayName: 'Get Terraform cache'
+    inputs:
+      key: 'terraform | init | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildNumber)" | "$(Build.SourceVersion)"'
+
+  - script: |
+      env
+      ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+    displayName: Debug plan
+    env:
+      ${{ parameters.terraformTfVars}}
+
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '${{ parameters.azureSubscription }}'
+      scriptType: 'bash'
+      scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-apply.sh'
+      arguments: '${{ parameters.terraformDirectory }}'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
+      addSpnToEnvironment: true
+    displayName: 'Run terraform apply'
+    env:
+      ${{ parameters.terraformTfVars}}

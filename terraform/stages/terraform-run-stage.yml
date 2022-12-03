@@ -60,8 +60,10 @@ stages:
       - template: ../jobs/apply.yml
         parameters:
           azureSubscription: ${{ parameters.azureSubscription }}
-          poolName: ${{ parameters.poolName }}
+          container: ${{ parameters.container }}
           environmentName: ${{ parameters.environmentName }}
+          poolName: ${{ parameters.poolName }}
+          terraformDirectory: ${{ parameters.terraformDirectory }}
     - ${{ if eq(parameters['stage'], 'destroy') }}:
       - template: ../jobs/destroy.yml
         parameters:
