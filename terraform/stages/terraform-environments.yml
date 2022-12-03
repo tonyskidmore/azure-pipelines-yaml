@@ -1,6 +1,8 @@
 ---
 
 parameters:
+  - name: azureSubscription
+    type: string
   - name: container
     type: string
   - name: poolName
@@ -27,6 +29,7 @@ stages:
   - ${{ each environment in parameters.environments }}:
     - template: ../stages/terraform-stages.yml
       parameters:
+        azureSubscription: ${{ parameters.azureSubscription }}
         container: ${{ parameters.container }}
         poolName: ${{ parameters.poolName }}
         environment: ${{ environment }}

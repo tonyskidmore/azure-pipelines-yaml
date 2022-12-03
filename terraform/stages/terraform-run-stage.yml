@@ -1,6 +1,8 @@
 ---
 
 parameters:
+  - name: azureSubscription
+    type: string
   - name: container
     type: string
   - name: poolName
@@ -47,6 +49,7 @@ stages:
     - ${{ if eq(parameters['stage'], 'init_plan') }}:
       - template: ../jobs/init_plan.yml
         parameters:
+          azureSubscription: ${{ parameters.azureSubscription }}
           container: ${{ parameters.container }}
           checkout: ${{ parameters.initCheckout }}
           poolName: ${{ parameters.poolName }}
@@ -55,11 +58,13 @@ stages:
     - ${{ if eq(parameters['stage'], 'apply') }}:
       - template: ../jobs/apply.yml
         parameters:
+          azureSubscription: ${{ parameters.azureSubscription }}
           poolName: ${{ parameters.poolName }}
           environmentName: ${{ parameters.environmentName }}
     - ${{ if eq(parameters['stage'], 'destroy') }}:
       - template: ../jobs/destroy.yml
         parameters:
+          azureSubscription: ${{ parameters.azureSubscription }}
           poolName: ${{ parameters.poolName }}
           environmentName: ${{ parameters.environmentName }}
 

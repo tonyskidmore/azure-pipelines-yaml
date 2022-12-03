@@ -1,6 +1,8 @@
 ---
 
 parameters:
+  - name: azureSubscription
+    type: string
   - name: checkout
     type: object
   - name: container
@@ -26,6 +28,7 @@ jobs:
 
       - template: ../steps/terraform-init.yml
         parameters:
+          azureSubscription: ${{ parameters.azureSubscription }}
           terraformVersion: ${{ parameters.terraformVersion }}
           checkout: ${{ parameters.checkout }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
@@ -33,5 +36,6 @@ jobs:
 
       - template: ../steps/terraform-plan.yml
         parameters:
+          azureSubscription: ${{ parameters.azureSubscription }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
           terraformTfVars: ${{ parameters.terraformTfVars }}

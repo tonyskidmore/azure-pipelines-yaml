@@ -1,6 +1,8 @@
 ---
 
 parameters:
+  - name: azureSubscription
+    type: string
   - name: terraformDirectory
     type: string
   - name: terraformVersion
@@ -47,9 +49,23 @@ steps:
   #     workingDirectory: '${{ parameters.terraformDirectory }}'
   #   displayName: 'Install azure-cli'
 
+
   - task: AzureCLI@2
     inputs:
-      azureSubscription: 'demo-vmss' # TODO: make parameter
+      azureSubscription: '${{ parameters.azureSubscription }}'
+      scriptType: 'bash'
+      scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-init.sh'
+      arguments: '${{ parameters.terraformDirectory }}'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
+      addSpnToEnvironment: true
+    displayName: 'Terraform authentication'
+    condition: gt(length('${{ parameters.backendServiceArm }}'), 0)
+    env:
+      ${{ parameters.terraformTfVars}}
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '${{ parameters.azureSubscription }}'
       scriptType: 'bash'
       scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-init.sh'
       arguments: '${{ parameters.terraformDirectory }}'
