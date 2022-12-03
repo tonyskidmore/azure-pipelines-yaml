@@ -11,7 +11,7 @@ steps:
   - script: |
       env
       ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-    displayName: Debug
+    displayName: Debug plan
     env:
       ${{ parameters.terraformTfVars}}
 
