@@ -7,6 +7,8 @@ parameters:
     type: object
   - name: container
     type: string
+  - name: environmentName
+    type: string
   - name: poolName
     type: string
   - name: terraformVersion
@@ -29,6 +31,7 @@ jobs:
       - template: ../steps/terraform-init.yml
         parameters:
           azureSubscription: ${{ parameters.azureSubscription }}
+          environmentName: ${{ parameters.environmentName }}
           terraformVersion: ${{ parameters.terraformVersion }}
           checkout: ${{ parameters.checkout }}
           terraformDirectory: ${{ parameters.terraformDirectory }}

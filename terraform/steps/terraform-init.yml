@@ -3,6 +3,8 @@
 parameters:
   - name: azureSubscription
     type: string
+  - name: environmentName
+    type: string
   - name: terraformDirectory
     type: string
   - name: terraformVersion
@@ -17,7 +19,7 @@ steps:
   - task: Cache@2
     displayName: 'Register init cache'
     inputs:
-      key: 'terraform | init | "$(Agent.OS)" | "$(Build.BuildNumber)" | "$(Build.SourceVersion)"'
+      key: 'terraform | init | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildNumber)" | "$(Build.SourceVersion)"'
       path: $(System.DefaultWorkingDirectory)
 
   - ${{ if gt(length(parameters.checkout), 1) }}:
@@ -59,7 +61,7 @@ steps:
       workingDirectory: '${{ parameters.terraformDirectory }}'
       addSpnToEnvironment: true
     displayName: 'Terraform authentication'
-    condition: gt(length('${{ parameters.backendServiceArm }}'), 0)
+    condition: gt(length('${{ parameters.azureSubscription }}'), 0)
     env:
       ${{ parameters.terraformTfVars}}
 
