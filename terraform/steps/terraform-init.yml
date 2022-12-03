@@ -19,7 +19,7 @@ steps:
   - task: Cache@2
     displayName: 'Register init cache'
     inputs:
-      key: 'terraform | init | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildNumber)" | "$(Build.SourceVersion)"'
+      key: 'terraform | init | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildId)" | "$(Build.SourceVersion)"'
       path: $(System.DefaultWorkingDirectory)
 
   - ${{ if gt(length(parameters.checkout), 1) }}:
