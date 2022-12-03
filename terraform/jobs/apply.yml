@@ -1,6 +1,8 @@
 ---
 
 parameters:
+  - name: azureSubscription
+    type: string
   - name: environmentName
     type: string
   - name: poolName
