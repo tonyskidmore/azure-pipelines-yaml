@@ -16,6 +16,8 @@ trigger: none
 
 variables:
 - group: build
+- name: serviceConnection
+  value: "demo-vmss"
 # - name: containerImage
 #   value: "ghcr.io/tonyskidmore/azdo-container-image:latest"
 
@@ -51,6 +53,7 @@ stages:
 
 - template: ../terraform/terraform.yml
   parameters:
+    azureSubscription: '${{ variables.serviceConnection }}'
     # container: ubuntu20_04
     initCheckout:
       - self
