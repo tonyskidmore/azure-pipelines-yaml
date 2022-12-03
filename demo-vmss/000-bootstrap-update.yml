@@ -59,4 +59,5 @@ stages:
       - update
     poolName: 'vmss-bootstrap-pool'
     terraformDirectory: '$(System.DefaultWorkingDirectory)/module/demo_environment'
-
+    terraformTfVars:
+      TF_VAR_ado_ext_pat: $(ado_ext_pat)
