@@ -64,4 +64,5 @@ stages:
     terraformDirectory: '$(System.DefaultWorkingDirectory)/module/demo_environment'
     terraformTfVars:
       TF_VAR_ado_ext_pat: $(ado_ext_pat)
+      TF_VAR_ado_org: $(ado_org)
       AZ_SUBSCRIPTION: $(azurerm_subscription_id)
