@@ -63,6 +63,10 @@ stages:
     poolName: 'vmss-bootstrap-pool'
     terraformDirectory: '$(System.DefaultWorkingDirectory)/module/demo_environment'
     terraformTfVars:
+      AZ_SUBSCRIPTION: $(azurerm_subscription_id)
       TF_VAR_ado_ext_pat: $(ado_ext_pat)
       TF_VAR_ado_org: $(ado_org)
-      AZ_SUBSCRIPTION: $(azurerm_subscription_id)
+      TF_VAR_azurerm_subscription_id: $(azurerm_subscription_id)
+      TF_VAR_azurerm_spn_tenantid: $(azurerm_spn_tenantid)
+      TF_VAR_azurerm_serviceprincipalid: $(azurerm_serviceprincipalid)
+      TF_VAR_serviceprincipalkey: $(azurerm_subscription_id)
