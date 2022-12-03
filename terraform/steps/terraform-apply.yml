@@ -26,6 +26,18 @@ steps:
     env:
       ${{ parameters.terraformTfVars}}
 
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '${{ parameters.azureSubscription }}'
+      scriptType: 'bash'
+      scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-auth.sh'
+      arguments: '${{ parameters.terraformDirectory }}'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
+      addSpnToEnvironment: true
+    displayName: 'Terraform authentication'
+    condition: gt(length('${{ parameters.azureSubscription }}'), 0)
+    env:
+      ${{ parameters.terraformTfVars}}
 
   - task: AzureCLI@2
     inputs:
