@@ -31,25 +31,25 @@ pool:
 #       image: '${{ variables.containerImage }}'
 
 stages:
-# - ${{ if eq(parameters.operation, 'first-time-only') }}:
-- stage: update
-  condition: eq('${{ parameters.operation }}', 'first-time-only')
+- ${{ if eq(parameters.operation, 'first-time-only') }}:
+  - stage: update
+    # condition: eq('${{ parameters.operation }}', 'first-time-only')
 
-  jobs:
-    - job: update
-      displayName: "Update Terraform Code"
-      continueOnError: false
-      # container: ubuntu20_04
+    jobs:
+      - job: update
+        displayName: "Update Terraform Code"
+        continueOnError: false
+        # container: ubuntu20_04
 
-      steps:
+        steps:
 
-        # - checkout: self
-        # - checkout: git://$(project)/module
+          # - checkout: self
+          # - checkout: git://$(project)/module
 
-        - script: |
-            env
-            ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-          displayName: Debug
+          - script: |
+              env
+              ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+            displayName: Debug
 
 - template: ../terraform/terraform.yml
   parameters:
