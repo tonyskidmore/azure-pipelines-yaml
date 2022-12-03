@@ -11,6 +11,8 @@ parameters:
     type: string
   - name: terraformDirectory
     type: string
+  - name: terraformTfVars
+    type: object
 
 jobs:
   - deployment: terraform_apply
@@ -25,8 +27,8 @@ jobs:
           steps:
 
             - template: ../steps/terraform-apply.yml
-
-            # - script: |
-            #     env
-            #     ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-            #   displayName: Debug
+              parameters:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                environmentName: ${{ parameters.environmentName }}
+                terraformDirectory: ${{ parameters.terraformDirectory }}
+                terraformTfVars: ${{ parameters.terraformTfVars }}

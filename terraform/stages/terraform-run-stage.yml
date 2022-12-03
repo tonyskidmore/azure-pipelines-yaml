@@ -64,12 +64,16 @@ stages:
           environmentName: ${{ parameters.environmentName }}
           poolName: ${{ parameters.poolName }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
+          terraformTfVars: ${{ parameters.terraformTfVars }}
     - ${{ if eq(parameters['stage'], 'destroy') }}:
       - template: ../jobs/destroy.yml
         parameters:
           azureSubscription: ${{ parameters.azureSubscription }}
-          poolName: ${{ parameters.poolName }}
+          container: ${{ parameters.container }}
           environmentName: ${{ parameters.environmentName }}
+          poolName: ${{ parameters.poolName }}
+          terraformDirectory: ${{ parameters.terraformDirectory }}
+          terraformTfVars: ${{ parameters.terraformTfVars }}
 
     # dependsOn:
     #   - ${{ each depParent in parameters.parentDependsOn }}:
