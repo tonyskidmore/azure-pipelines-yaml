@@ -37,7 +37,7 @@ stages:
     - job: update
       displayName: "Update Terraform Code"
       continueOnError: false
-      container: ubuntu20_04
+      # container: ubuntu20_04
 
       steps:
 
@@ -48,7 +48,7 @@ stages:
 
 - template: ../terraform/terraform.yml
   parameters:
-    container: ubuntu20_04
+    # container: ubuntu20_04
     initCheckout:
       - self
       - git://$(project)/module
