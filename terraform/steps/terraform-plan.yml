@@ -1,0 +1,29 @@
+---
+
+parameters:
+  - name: terraformDirectory
+    type: string
+  - name: terraformTfVars
+    type: object
+
+steps:
+
+  - script: |
+      env
+      ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+    displayName: Debug
+    env:
+      ${{ parameters.terraformTfVars}}
+
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'demo-vmss' # TODO: make parameter
+      scriptType: 'bash'
+      scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-plan.sh'
+      arguments: '${{ parameters.terraformDirectory }}'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
+      addSpnToEnvironment: true
+    displayName: 'Run terraform plan'
+    env:
+      ${{ parameters.terraformTfVars}}

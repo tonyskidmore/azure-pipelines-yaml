@@ -16,35 +16,38 @@ trigger: none
 
 variables:
 - group: build
-- name: containerImage
-  value: "ghcr.io/tonyskidmore/azdo-container-image:latest"
+# - name: containerImage
+#   value: "ghcr.io/tonyskidmore/azdo-container-image:latest"
 
 pool:
   name: 'vmss-bootstrap-pool'
 
 
-resources:
-  containers:
-    - container: ubuntu20_04
-      image: '${{ variables.containerImage }}'
+# resources:
+#   containers:
+#     - container: ubuntu20_04
+#       image: '${{ variables.containerImage }}'
 
 stages:
-# - ${{ if eq(parameters.operation, 'first-time-only') }}:
-- stage: update
-  condition: eq('${{ parameters.operation }}', 'first-time-only')
+- ${{ if eq(parameters.operation, 'first-time-only') }}:
+  - stage: update
+    condition: eq('${{ parameters.operation }}', 'first-time-only')
 
-  jobs:
-    - job: update
-      displayName: "Update Terraform Code"
-      continueOnError: false
-      # container: ubuntu20_04
+    jobs:
+      - job: update
+        displayName: "Update Terraform Code"
+        continueOnError: false
+        # container: ubuntu20_04
 
-      steps:
+        steps:
 
-        - script: |
-            env
-            ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-          displayName: Debug
+          - checkout: self
+          - checkout: git://$(project)/module
+
+          - script: |
+              env
+              ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+            displayName: Debug
 
 - template: ../terraform/terraform.yml
   parameters:
@@ -57,42 +60,3 @@ stages:
     poolName: 'vmss-bootstrap-pool'
     terraformDirectory: '$(System.DefaultWorkingDirectory)/module/demo_environment'
 
-  # jobs:
-  #   - job: apply
-  #     displayName: "Apply Terraform Code"
-  #     continueOnError: false
-  #     container: ubuntu20_04
-
-
-
-  #     steps:
-
-  #       - checkout: self
-  #       - checkout: git://$(project)/module
-
-  #       - script: |
-  #           source /etc/os-release
-  #           printf "Running on: %s\n" "$PRETTY_NAME"
-  #         displayName: Check operating system version
-
-  #       - script: |
-  #           echo "Build index: $(build_index)"
-  #         displayName: Check build index
-
-  #       - script: |
-  #           set -e
-  #           TERRAFORM_VERSION=$(curl --silent --show-error https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r .current_version)
-  #           wget --quiet https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-  #           unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-  #           rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-  #           sudo mv terraform /usr/bin
-  #         displayName: Install latest Terraform
-
-  #       - script: |
-  #           terraform version
-  #         displayName: Terraform version
-
-  #       - script: |
-  #           env
-  #           ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-  #         displayName: Debug
