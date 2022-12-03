@@ -68,5 +68,5 @@ stages:
       TF_VAR_ado_org: $(ado_org)
       TF_VAR_azurerm_subscription_id: $(azurerm_subscription_id)
       TF_VAR_azurerm_spn_tenantid: $(azurerm_spn_tenantid)
-      TF_VAR_azurerm_serviceprincipalid: $(azurerm_serviceprincipalid)
-      TF_VAR_serviceprincipalkey: $(azurerm_subscription_id)
+      TF_VAR_serviceprincipalid: $(serviceprincipalid)
+      TF_VAR_serviceprincipalkey: $(serviceprincipalkey)
