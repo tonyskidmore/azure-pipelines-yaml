@@ -52,7 +52,7 @@ stages:
           azureSubscription: ${{ parameters.azureSubscription }}
           container: ${{ parameters.container }}
           checkout: ${{ parameters.initCheckout }}
-          environmentName: ${{ environmentName.initCheckout }}
+          environmentName: ${{ parameters.environmentName }}
           poolName: ${{ parameters.poolName }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
           terraformTfVars: ${{ parameters.terraformTfVars }}
