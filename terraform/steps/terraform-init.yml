@@ -56,7 +56,7 @@ steps:
     inputs:
       azureSubscription: '${{ parameters.azureSubscription }}'
       scriptType: 'bash'
-      scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-init.sh'
+      scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-auth.sh'
       arguments: '${{ parameters.terraformDirectory }}'
       workingDirectory: '${{ parameters.terraformDirectory }}'
       addSpnToEnvironment: true
