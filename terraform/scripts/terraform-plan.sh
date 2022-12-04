@@ -7,6 +7,8 @@ tf_destroy="$2"
 
 printf "Terraform working directory: %s\n" "$tf_dir"
 
+printf "tf_destroy: %s\n" "$tf_destroy"
+
 params=("plan" "-out=tfplan" "-input=false" "-detailed-exitcode")
 
 if [[ "${tf_destroy,,}" == "true" ]]
