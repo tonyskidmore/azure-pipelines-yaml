@@ -45,24 +45,27 @@ parameters:
     default:
       init_plan:
         dependsOn: []
+        stageName: "init_plan"
         # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
         condition: succeeded()
-        stageName: "init_plan"
-      # plan:
-      #   dependsOn: [init]
-      #   # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
-      #   condition: succeeded()
-      #   stageName: "plan"
       apply:
         dependsOn: [init_plan]
-        # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
-        condition: succeeded()
         stageName: "apply"
+        # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+        condition: and(
+                      eq(dependencies.init_plan.outputs['init_plan.terraform_plan.tf_detailed_exit_code'], 2),
+                      succeeded()
+                    )
+                  # or(
+                  #     eq(variables['Build.SourceBranch'], 'refs/heads/main'),
+                  #     eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+                  #     eq('${{ parameters.tfApplyForceBranch }}', true)
+                  # )
       destroy:
         dependsOn: [init_plan]
+        stageName: "destroy"
         # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
         condition: succeeded()
-        stageName: "destroy"
   - name: terraformDirectory
     type: string
   - name: terraformTfVars

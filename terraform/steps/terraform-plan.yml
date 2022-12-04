@@ -27,5 +27,6 @@ steps:
       workingDirectory: '${{ parameters.terraformDirectory }}'
       addSpnToEnvironment: true
     displayName: 'Run terraform plan'
+    name: terraform_plan
     env:
       ${{ parameters.terraformTfVars}}
