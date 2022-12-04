@@ -58,9 +58,9 @@ stages:
     initCheckout:
       - self
       # TODO:
-      - checkout: git://$(project)/module@refs/heads/examples
+      - git://$(project)/module@refs/heads/examples
       # - git://$(project)/module
-    - ${{ if eq(parameters.operation, 'first-time-only') }}:
+    ${{ if eq(parameters.operation, 'first-time-only') }}:
       dependsOn:
         - update
     poolName: 'vmss-bootstrap-pool'
