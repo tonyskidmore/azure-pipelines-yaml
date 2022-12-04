@@ -17,7 +17,7 @@ steps:
   - task: Cache@2
     displayName: 'Get Terraform cache'
     inputs:
-      key: 'terraform | init | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildId)" | "$(Build.SourceVersion)"'
+      key: 'terraform | plan | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildId)" | "$(Build.SourceVersion)"'
 
   - script: |
       env

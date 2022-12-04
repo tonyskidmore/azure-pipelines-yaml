@@ -16,12 +16,6 @@ parameters:
 
 steps:
 
-  - task: Cache@2
-    displayName: 'Register init cache'
-    inputs:
-      key: 'terraform | init | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildId)" | "$(Build.SourceVersion)"'
-      path: $(System.DefaultWorkingDirectory)
-
   - ${{ if gt(length(parameters.checkout), 1) }}:
     - ${{ each repo in parameters.checkout }}:
       - checkout: ${{ repo }}

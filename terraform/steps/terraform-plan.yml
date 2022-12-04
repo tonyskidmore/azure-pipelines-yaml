@@ -30,3 +30,9 @@ steps:
     name: terraform_plan
     env:
       ${{ parameters.terraformTfVars}}
+
+  - task: Cache@2
+    displayName: 'Register plan cache'
+    inputs:
+      key: 'terraform | plan | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildId)" | "$(Build.SourceVersion)"'
+      path: $(System.DefaultWorkingDirectory)
