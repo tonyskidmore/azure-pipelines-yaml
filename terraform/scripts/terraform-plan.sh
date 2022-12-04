@@ -7,7 +7,7 @@ tf_destroy="$2"
 
 printf "Terraform working directory: %s\n" "$tf_dir"
 
-params=("plan" "-out tfplan" "-input=false" "-detailed-exitcode")
+params=("plan" "-out=tfplan" "-input=false" "-detailed-exitcode")
 
 if [[ "${tf_destroy,,}" == "true" ]]
 then
@@ -27,7 +27,7 @@ echo "##vso[task.setvariable variable=tf_detailed_exit_code;isOutput=true]$exit_
 if [[ $exit_code -eq 2  ]]
 then
   printf "Terraform detected required changes\n"
-  echo "##vso[task.setvariable variable=TF_REQUIRED_CHANGES;]'true'"
+  echo "##vso[task.setvariable variable=TF_REQUIRED_CHANGES;]true"
   exit_code=0
 fi
 
