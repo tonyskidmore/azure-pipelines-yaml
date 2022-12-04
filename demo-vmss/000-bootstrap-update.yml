@@ -57,9 +57,12 @@ stages:
     # container: ubuntu20_04
     initCheckout:
       - self
-      - git://$(project)/module
-    dependsOn:
-      - update
+      # TODO:
+      - checkout: git://$(project)/module@refs/heads/examples
+      # - git://$(project)/module
+    - ${{ if eq(parameters.operation, 'first-time-only') }}:
+      dependsOn:
+        - update
     poolName: 'vmss-bootstrap-pool'
     terraformDirectory: '$(System.DefaultWorkingDirectory)/module/demo_environment'
     terraformTfVars:
