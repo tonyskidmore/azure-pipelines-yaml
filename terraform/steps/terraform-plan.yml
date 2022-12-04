@@ -3,6 +3,8 @@
 parameters:
   - name: azureSubscription
     type: string
+  - name: destroyMode
+    type: boolean
   - name: environmentName
     type: string
   - name: terraformDirectory
@@ -25,7 +27,7 @@ steps:
       azureSubscription: '${{ parameters.azureSubscription }}'
       scriptType: 'bash'
       scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-plan.sh'
-      arguments: '${{ parameters.terraformDirectory }}'
+      arguments: '${{ parameters.terraformDirectory }} ${{ parameters.destroyMode }}'
       workingDirectory: '${{ parameters.terraformDirectory }}'
       addSpnToEnvironment: true
     displayName: 'Run terraform plan'
@@ -38,3 +40,4 @@ steps:
     inputs:
       key: 'terraform | plan | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildId)" | "$(Build.SourceVersion)"'
       path: $(System.DefaultWorkingDirectory)
+    condition: and(succeeded(), eq(variables.TF_REQUIRED_CHANGES, 'true'))

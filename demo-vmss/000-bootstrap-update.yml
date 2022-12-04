@@ -55,6 +55,7 @@ stages:
   parameters:
     azureSubscription: '${{ variables.serviceConnection }}'
     # container: ubuntu20_04
+    destroyMode: eq('${{ parameters.operation }}', 'terraform-destroy')
     initCheckout:
       - self
       # TODO:
@@ -64,6 +65,10 @@ stages:
       dependsOn:
         - update
     poolName: 'vmss-bootstrap-pool'
+    ${{ if eq(parameters.operation, 'terraform-destroy') }}:
+      stages:
+        - init_plan
+        - destroy
     terraformDirectory: '$(System.DefaultWorkingDirectory)/module/demo_environment'
     terraformTfVars:
       AZ_SUBSCRIPTION: $(azurerm_subscription_id)

@@ -1,10 +1,22 @@
 #!/bin/bash
 
+set -x
+
 tf_dir="$1"
+tf_destroy="$2"
 
 printf "Terraform working directory: %s\n" "$tf_dir"
 
-TF_IN_AUTOMATION=true terraform plan -out tfplan -input=false -detailed-exitcode
+params=("plan" "-out tfplan" "-input=false" "-detailed-exitcode")
+
+if [[ "${tf_destroy,,}" == "true" ]]
+then
+  echo "Destroy mode requested"
+  params+=("-destroy")
+fi
+
+printf "terraform %s\n" "${params[*]}"
+TF_IN_AUTOMATION=true terraform plan "${params[@]}"
 exit_code=$?
 
 printf "Terraform exit code: %s\n" "$exit_code"
@@ -15,6 +27,7 @@ echo "##vso[task.setvariable variable=tf_detailed_exit_code;isOutput=true]$exit_
 if [[ $exit_code -eq 2  ]]
 then
   printf "Terraform detected required changes\n"
+  echo "##vso[task.setvariable variable=TF_REQUIRED_CHANGES;]'true'"
   exit_code=0
 fi
 

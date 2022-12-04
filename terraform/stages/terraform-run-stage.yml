@@ -5,6 +5,8 @@ parameters:
     type: string
   - name: container
     type: string
+  - name: destroyMode
+    type: boolean
   - name: poolName
     type: string
   - name: dependsOn
@@ -58,6 +60,7 @@ stages:
           azureSubscription: ${{ parameters.azureSubscription }}
           container: ${{ parameters.container }}
           checkout: ${{ parameters.initCheckout }}
+          destroyMode: ${{ parameters.destroyMode }}
           environmentName: ${{ parameters.environmentName }}
           poolName: ${{ parameters.poolName }}
           terraformDirectory: ${{ parameters.terraformDirectory }}

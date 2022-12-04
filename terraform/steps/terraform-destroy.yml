@@ -17,15 +17,27 @@ steps:
   - task: Cache@2
     displayName: 'Get Terraform cache'
     inputs:
-      key: 'terraform | init | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildNumber)" | "$(Build.SourceVersion)"'
+      key: 'terraform | plan | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildId)" | "$(Build.SourceVersion)"'
 
   - script: |
       env
       ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-    displayName: Debug plan
+    displayName: Debug destroy
     env:
       ${{ parameters.terraformTfVars}}
 
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '${{ parameters.azureSubscription }}'
+      scriptType: 'bash'
+      scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-auth.sh'
+      arguments: '${{ parameters.terraformDirectory }}'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
+      addSpnToEnvironment: true
+    displayName: 'Terraform authentication'
+    condition: gt(length('${{ parameters.azureSubscription }}'), 0)
+    env:
+      ${{ parameters.terraformTfVars}}
 
   - task: AzureCLI@2
     inputs:
@@ -35,6 +47,6 @@ steps:
       arguments: '${{ parameters.terraformDirectory }}'
       workingDirectory: '${{ parameters.terraformDirectory }}'
       addSpnToEnvironment: true
-    displayName: 'Run terraform apply'
+    displayName: 'Run terraform destroy'
     env:
       ${{ parameters.terraformTfVars}}

@@ -13,6 +13,8 @@ parameters:
     type: object
   - name: dependsOn
     type: object
+  - name: destroyMode
+    type: boolean
   - name: initCheckout
     type: object
   - name: stages
@@ -31,6 +33,7 @@ stages:
       parameters:
         azureSubscription: ${{ parameters.azureSubscription }}
         container: ${{ parameters.container }}
+        destroyMode: ${{ parameters.destroyMode }}
         poolName: ${{ parameters.poolName }}
         environment: ${{ environment }}
         environmentDependsOn: ${{ parameters.environmentParameters[environment].dependsOn }}
