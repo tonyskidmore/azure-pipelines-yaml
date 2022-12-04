@@ -65,7 +65,7 @@ stages:
           poolName: ${{ parameters.poolName }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
           terraformTfVars: ${{ parameters.terraformTfVars }}
-    - ${{ if eq(parameters['stage'], 'apply') }}:
+    - ${{ if or( eq(parameters['stage'], 'apply'), eq(parameters['stage'], 'destroy') ) }}:
       - template: ../jobs/apply.yml
         parameters:
           azureSubscription: ${{ parameters.azureSubscription }}
@@ -74,15 +74,15 @@ stages:
           poolName: ${{ parameters.poolName }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
           terraformTfVars: ${{ parameters.terraformTfVars }}
-    - ${{ if eq(parameters['stage'], 'destroy') }}:
-      - template: ../jobs/destroy.yml
-        parameters:
-          azureSubscription: ${{ parameters.azureSubscription }}
-          container: ${{ parameters.container }}
-          environmentName: ${{ parameters.environmentName }}
-          poolName: ${{ parameters.poolName }}
-          terraformDirectory: ${{ parameters.terraformDirectory }}
-          terraformTfVars: ${{ parameters.terraformTfVars }}
+    # - ${{ if eq(parameters['stage'], 'destroy') }}:
+    #   - template: ../jobs/apply.yml
+    #     parameters:
+    #       azureSubscription: ${{ parameters.azureSubscription }}
+    #       container: ${{ parameters.container }}
+    #       environmentName: ${{ parameters.environmentName }}
+    #       poolName: ${{ parameters.poolName }}
+    #       terraformDirectory: ${{ parameters.terraformDirectory }}
+    #       terraformTfVars: ${{ parameters.terraformTfVars }}
 
     # dependsOn:
     #   - ${{ each depParent in parameters.parentDependsOn }}:
