@@ -55,7 +55,8 @@ stages:
   parameters:
     azureSubscription: '${{ variables.serviceConnection }}'
     # container: ubuntu20_04
-    destroyMode: eq('${{ parameters.operation }}', 'terraform-destroy')
+    ${{ if eq('${{ parameters.operation }}', 'terraform-destroy') }}:
+      destroyMode: true
     initCheckout:
       - self
       # TODO:

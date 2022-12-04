@@ -16,7 +16,7 @@ then
 fi
 
 printf "terraform %s\n" "${params[*]}"
-TF_IN_AUTOMATION=true terraform plan "${params[@]}"
+TF_IN_AUTOMATION=true terraform "${params[@]}"
 exit_code=$?
 
 printf "Terraform exit code: %s\n" "$exit_code"
