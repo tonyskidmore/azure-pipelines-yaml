@@ -52,15 +52,16 @@ parameters:
         dependsOn: [init_plan]
         stageName: "apply"
         # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
-        condition: and(
-                      eq(dependencies.init_plan.outputs['init_plan.terraform_plan.tf_detailed_exit_code'], 2),
-                      succeeded()
-                    )
-                  # or(
-                  #     eq(variables['Build.SourceBranch'], 'refs/heads/main'),
-                  #     eq(variables['Build.SourceBranch'], 'refs/heads/master'),
-                  #     eq('${{ parameters.tfApplyForceBranch }}', true)
-                  # )
+        condition: ''
+        # condition: and(
+        #               eq(dependencies.init_plan.outputs['init_plan.terraform_plan.tf_detailed_exit_code'], 2),
+        #               succeeded()
+        #             )
+        #           # or(
+        #           #     eq(variables['Build.SourceBranch'], 'refs/heads/main'),
+        #           #     eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+        #           #     eq('${{ parameters.tfApplyForceBranch }}', true)
+        #           # )
       destroy:
         dependsOn: [init_plan]
         stageName: "destroy"

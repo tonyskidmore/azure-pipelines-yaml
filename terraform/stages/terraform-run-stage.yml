@@ -44,7 +44,13 @@ stages:
           - ${{ depEnv }}_${{ dep }}
       - ${{ each dep in parameters.dependsOn }}:
         - ${{ parameters.environmentName }}_${{ dep }}
-    condition: ${{ parameters.condition }}
+    ${{ if gt(length(parameters.condition),0) }}:
+      condition: ${{ parameters.condition }}
+    ${{ elseif eq(parameters.stageName, 'apply') }}:
+      condition: and(
+                    eq(dependencies.${{ parameters.environment }}_init_plan.outputs['init_plan.terraform_plan.tf_detailed_exit_code'], 2),
+                    succeeded()
+                  )
     jobs:
     - ${{ if eq(parameters['stage'], 'init_plan') }}:
       - template: ../jobs/init_plan.yml
