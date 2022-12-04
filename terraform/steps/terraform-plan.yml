@@ -3,6 +3,8 @@
 parameters:
   - name: azureSubscription
     type: string
+  - name: environmentName
+    type: string
   - name: terraformDirectory
     type: string
   - name: terraformTfVars
