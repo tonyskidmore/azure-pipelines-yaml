@@ -3,6 +3,8 @@
 parameters:
   - name: azureSubscription
     type: string
+  - name: destroyMode
+    type: boolean
   - name: destroyModeLocal
     type: boolean
   - name: environmentName
@@ -36,17 +38,7 @@ steps:
       filePath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-install.sh'
       arguments: '${{ parameters.terraformVersion }}'
       workingDirectory: '${{ parameters.terraformDirectory }}'
-      # failOnStderr: true
-      # bashEnvValue: 'tony=good'
     displayName: 'Install Terraform: ${{ parameters.terraformVersion }}'
-
-  # - task: Bash@3
-  #   inputs:
-  #     filePath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/azurecli-install.sh'
-  #     # arguments: '${{ parameters.azurecliVersion }}'
-  #     workingDirectory: '${{ parameters.terraformDirectory }}'
-  #   displayName: 'Install azure-cli'
-
 
   - task: AzureCLI@2
     inputs:
@@ -66,7 +58,7 @@ steps:
       azureSubscription: '${{ parameters.azureSubscription }}'
       scriptType: 'bash'
       scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-init.sh'
-      arguments: '${{ parameters.terraformDirectory }} ${{ parameters.destroyModeLocal }}'
+      arguments: '${{ parameters.terraformDirectory }} ${{ parameters.destroyMode }} ${{ parameters.destroyModeLocal }}'
       workingDirectory: '${{ parameters.terraformDirectory }}'
       addSpnToEnvironment: true
     displayName: 'Run terraform init'
