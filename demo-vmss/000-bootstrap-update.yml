@@ -66,10 +66,10 @@ stages:
       dependsOn:
         - update
     poolName: 'vmss-bootstrap-pool'
-    ${{ if eq(parameters.operation, 'terraform-destroy') }}:
-      stages:
-        - init_plan
-        - destroy
+    # ${{ if eq(parameters.operation, 'terraform-destroy') }}:
+    #   stages:
+    #     - init_plan
+    #     - destroy
     terraformDirectory: '$(System.DefaultWorkingDirectory)/module/demo_environment'
     terraformTfVars:
       AZ_SUBSCRIPTION: $(azurerm_subscription_id)

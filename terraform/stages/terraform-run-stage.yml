@@ -34,8 +34,10 @@ parameters:
 
 
 stages:
+
   - stage: ${{ parameters.environment }}_${{ parameters.stageName }}
-    # displayName: upper(parameters.targetEnvironmentName)
+    ${{ if and( eq(parameters.destroyMode, true), eq(parameters.stageName, 'apply') ) }}:
+      displayName: ${{ parameters.environment }}_destroy
     pool:
       name: ${{ parameters.poolName }}
     dependsOn:
