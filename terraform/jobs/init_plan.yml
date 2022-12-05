@@ -37,6 +37,7 @@ jobs:
       - template: ../steps/terraform-init.yml
         parameters:
           azureSubscription: ${{ parameters.azureSubscription }}
+          destroyMode: ${{ parameters.destroyMode }}
           destroyModeLocal: ${{ parameters.destroyModeLocal }}
           environmentName: ${{ parameters.environmentName }}
           terraformVersion: ${{ parameters.terraformVersion }}
