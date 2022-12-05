@@ -13,6 +13,9 @@ parameters:
   - name: destroyMode
     type: boolean
     default: false
+  - name: destroyModeLocal
+    type: boolean
+    default: false
   - name: environments
     type: object
     default:
@@ -83,6 +86,7 @@ stages:
       azureSubscription: ${{ parameters.azureSubscription }}
       container: ${{ parameters.container }}
       destroyMode: ${{ parameters.destroyMode }}
+      destroyModeLocal: ${{ parameters.destroyModeLocal }}
       environments: ${{ parameters.environments }}
       environmentParameters: ${{ parameters.environmentParameters }}
       dependsOn: ${{ parameters.dependsOn }}

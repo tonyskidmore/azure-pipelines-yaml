@@ -57,6 +57,7 @@ stages:
     # container: ubuntu20_04
     ${{ if eq(parameters.operation, 'terraform-destroy') }}:
       destroyMode: true
+    destroyModeLocal: true
     initCheckout:
       - self
       # TODO:

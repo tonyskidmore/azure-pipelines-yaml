@@ -9,6 +9,8 @@ parameters:
     type: string
   - name: destroyMode
     type: boolean
+  - name: destroyModeLocal
+    type: boolean
   - name: environmentName
     type: string
   - name: poolName
@@ -35,6 +37,7 @@ jobs:
       - template: ../steps/terraform-init.yml
         parameters:
           azureSubscription: ${{ parameters.azureSubscription }}
+          destroyModeLocal: ${{ parameters.destroyModeLocal }}
           environmentName: ${{ parameters.environmentName }}
           terraformVersion: ${{ parameters.terraformVersion }}
           checkout: ${{ parameters.checkout }}

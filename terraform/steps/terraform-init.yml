@@ -3,6 +3,8 @@
 parameters:
   - name: azureSubscription
     type: string
+  - name: destroyModeLocal
+    type: boolean
   - name: environmentName
     type: string
   - name: terraformDirectory
@@ -64,7 +66,7 @@ steps:
       azureSubscription: '${{ parameters.azureSubscription }}'
       scriptType: 'bash'
       scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-init.sh'
-      arguments: '${{ parameters.terraformDirectory }}'
+      arguments: '${{ parameters.terraformDirectory }} ${{ parameters.destroyModeLocal }}'
       workingDirectory: '${{ parameters.terraformDirectory }}'
       addSpnToEnvironment: true
     displayName: 'Run terraform init'

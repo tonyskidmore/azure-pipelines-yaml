@@ -7,6 +7,8 @@ parameters:
     type: string
   - name: destroyMode
     type: boolean
+  - name: destroyModeLocal
+    type: boolean
   - name: poolName
     type: string
   - name: environment
@@ -36,6 +38,7 @@ stages:
         azureSubscription: ${{ parameters.azureSubscription }}
         container: ${{ parameters.container }}
         destroyMode: ${{ parameters.destroyMode }}
+        destroyModeLocal: ${{ parameters.destroyModeLocal }}
         poolName: ${{ parameters.poolName }}
         stage: ${{ stage }}
         stageName: ${{ parameters.stageParameters[stage].stageName }}

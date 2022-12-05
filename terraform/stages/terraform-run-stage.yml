@@ -7,6 +7,8 @@ parameters:
     type: string
   - name: destroyMode
     type: boolean
+  - name: destroyModeLocal
+    type: boolean
   - name: poolName
     type: string
   - name: dependsOn
@@ -63,6 +65,7 @@ stages:
           container: ${{ parameters.container }}
           checkout: ${{ parameters.initCheckout }}
           destroyMode: ${{ parameters.destroyMode }}
+          destroyModeLocal: ${{ parameters.destroyModeLocal }}
           environmentName: ${{ parameters.environmentName }}
           poolName: ${{ parameters.poolName }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
