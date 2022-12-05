@@ -54,7 +54,10 @@ stages:
       condition: ${{ parameters.condition }}
     ${{ elseif eq(parameters.stageName, 'apply') }}:
       condition: and(
-                    eq(dependencies.${{ parameters.environment }}_init_plan.outputs['init_plan.terraform_plan.tf_detailed_exit_code'], 2),
+                    or(
+                      eq(dependencies.${{ parameters.environment }}_init_plan.outputs['init_plan.terraform_plan.tf_detailed_exit_code'], 2),
+                      eq(${{ parameters.destroyMode }}, true)
+                    ),
                     succeeded()
                   )
     jobs:

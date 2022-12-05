@@ -9,12 +9,15 @@ printf "Terraform working directory: %s\n" "$tf_dir"
 
 printf "tf_destroy: %s\n" "$tf_destroy"
 
-params=("plan" "-out=tfplan" "-input=false" "-detailed-exitcode")
+# params=("plan" "-out=tfplan" "-input=false" "-detailed-exitcode")
 
 if [[ "${tf_destroy,,}" == "true" ]]
 then
   echo "Destroy mode requested"
-  params+=("-destroy")
+  params=("plan" "-destroy" "-input=false" "-out=tfplan")
+else
+    echo "Apply mode requested"
+  params=("plan" "-out=tfplan" "-input=false" "-detailed-exitcode")
 fi
 
 printf "terraform %s\n" "${params[*]}"
@@ -26,7 +29,7 @@ echo "##vso[task.setvariable variable=tf_detailed_exit_code;isOutput=true]$exit_
 
 # if exit code is equal to 2 then changes are required
 # https://www.terraform.io/docs/cli/commands/plan.html#usage
-if [[ $exit_code -eq 2  ]]
+if [[ $exit_code -eq 2 ]] || [[ "${tf_destroy,,}" == "true" ]]
 then
   printf "Terraform detected required changes\n"
   echo "##vso[task.setvariable variable=TF_REQUIRED_CHANGES;]true"
