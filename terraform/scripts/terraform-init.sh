@@ -13,14 +13,14 @@ printf "Terraform local destroy: %s\n" "$tf_destroy_local"
 # install git if not already installedgit status
 git --version || apt install git
 
+echo "Running terraform init"
+TF_IN_AUTOMATION=true terraform init
+
 if [[ "${tf_destroy_mode,,}" == "true" ]] && [[ "${tf_destroy_local,,}" == "true" ]]
 then
   echo "Local init requested"
-  ls
+  ls -alt
   rm backend.tf
-  ls
+  ls -alt
   TF_IN_AUTOMATION=true terraform init -migrate-state -force-copy
-else
-  echo "Running terraform init"
-  TF_IN_AUTOMATION=true terraform init
 fi
