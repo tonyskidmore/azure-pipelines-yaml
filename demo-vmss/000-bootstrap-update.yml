@@ -43,13 +43,17 @@ stages:
 
         steps:
 
-          # - checkout: self
-          # - checkout: git://$(project)/module
+          - checkout: self
+          - checkout: git://$(project)/module
 
           - script: |
               env
               ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
             displayName: Debug
+
+          - script: |
+              ls -alt "$SYSTEM_DEFAULTWORKINGDIRECTORY/module"
+            displayName: Directory listing
 
 - template: ../terraform/terraform.yml
   parameters:
