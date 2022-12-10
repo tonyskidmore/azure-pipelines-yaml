@@ -1,16 +1,6 @@
 ---
 
-name: "bootstrap"
-
-parameters:
-- name: operation
-  displayName: Bootstrap Operation
-  type: string
-  default: terraform-plan-apply
-  values:
-  - first-time-only
-  - terraform-plan-apply
-  - terraform-destroy
+name: "bootstrap-update"
 
 trigger: none
 
@@ -31,81 +21,48 @@ pool:
 #       image: '${{ variables.containerImage }}'
 
 stages:
-- ${{ if eq(parameters.operation, 'first-time-only') }}:
-  - stage: update
-    # condition: eq('${{ parameters.operation }}', 'first-time-only')
+- stage: update
+  # condition: eq('${{ parameters.operation }}', 'first-time-only')
 
-    jobs:
-      - job: update
-        workspace:
-          clean: all
-        displayName: "Update Terraform Code"
-        continueOnError: false
-        # container: ubuntu20_04
+  jobs:
+    - job: update
+      workspace:
+        clean: all
+      displayName: "Update Terraform Code"
+      continueOnError: false
+      # container: ubuntu20_04
 
-        steps:
+      steps:
 
-          - checkout: self
-          - checkout: git://$(project)/module
-            persistCredentials: true
+        - checkout: self
+        - checkout: git://$(project)/module
+          persistCredentials: true
 
-          - script: |
-              env
-              ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-            displayName: Debug
+        - script: |
+            env
+            ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+          displayName: Debug
 
-          - script: |
-              ls -alt "$SYSTEM_DEFAULTWORKINGDIRECTORY/module"
-            displayName: Directory listing
+        - script: |
+            ls -alt "$SYSTEM_DEFAULTWORKINGDIRECTORY/module"
+          displayName: Directory listing
 
-          - script: |
-              git config --global user.email pipeline@azdo.com
-              git config --global user.name "Azure DevOps Pipeline"
-              git checkout examples # TODO:
-            displayName: Configure git
-            workingDirectory: "$(System.DefaultWorkingDirectory)/module/demo_environment"
+        - script: |
+            git config --global user.email pipeline@azdo.com
+            git config --global user.name "Azure DevOps Pipeline"
+            git checkout examples # TODO:
+          displayName: Configure git
+          workingDirectory: "$(System.DefaultWorkingDirectory)/module/demo_environment"
 
-          - script: |
-              set -x
-              cp "$SYSTEM_DEFAULTWORKINGDIRECTORY/module/demo_environment/bootstrap_update/tf/"*.tf "$SYSTEM_DEFAULTWORKINGDIRECTORY/module/demo_environment"
-              ls -alt "$SYSTEM_DEFAULTWORKINGDIRECTORY/module/demo_environment"
-            displayName: Update files
+        - script: |
+            set -x
+            cp "$SYSTEM_DEFAULTWORKINGDIRECTORY/module/demo_environment/bootstrap_update/tf/"*.tf "$SYSTEM_DEFAULTWORKINGDIRECTORY/module/demo_environment"
+            ls -alt "$SYSTEM_DEFAULTWORKINGDIRECTORY/module/demo_environment"
+          displayName: Update files
 
-          - script: |
-              git add -A
-              git commit -m "Updating bootstrap"
-              git push --set-upstream origin examples # TODO: 
-            displayName: Git commit updates
-            workingDirectory: "$(System.DefaultWorkingDirectory)/module/demo_environment"
-
-- template: ../terraform/terraform.yml
-  parameters:
-    azureSubscription: '${{ variables.serviceConnection }}'
-    # container: ubuntu20_04
-    ${{ if eq(parameters.operation, 'terraform-destroy') }}:
-      destroyMode: true
-    destroyModeLocal: true
-    initCheckout:
-      - self
-      # TODO:
-      - git://$(project)/module@refs/heads/examples
-      # - git://$(project)/module
-    ${{ if eq(parameters.operation, 'first-time-only') }}:
-      dependsOn:
-        - update
-    poolName: 'vmss-bootstrap-pool'
-    # ${{ if eq(parameters.operation, 'terraform-destroy') }}:
-    #   stages:
-    #     - init_plan
-    #     - destroy
-    terraformDirectory: '$(System.DefaultWorkingDirectory)/module/demo_environment'
-    terraformTfVars:
-      AZ_SUBSCRIPTION: $(azurerm_subscription_id)
-      AZDO_PERSONAL_ACCESS_TOKEN: $(ado_ext_pat)
-      AZDO_ORG_SERVICE_URL: $(ado_org)
-      TF_VAR_ado_ext_pat: $(ado_ext_pat)
-      TF_VAR_ado_org: $(ado_org)
-      TF_VAR_azurerm_subscription_id: $(azurerm_subscription_id)
-      TF_VAR_azurerm_spn_tenantid: $(azurerm_spn_tenantid)
-      TF_VAR_serviceprincipalid: $(serviceprincipalid)
-      TF_VAR_serviceprincipalkey: $(serviceprincipalkey)
+        - script: |
+            git add -A
+            git commit -m "Updating bootstrap"
+            git push --set-upstream origin examples # TODO: 
+          displayName: Git commit updates
+          workingDirectory: "$(System.DefaultWorkingDirectory)/module/demo_environment"
