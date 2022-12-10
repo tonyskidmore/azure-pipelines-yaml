@@ -3,6 +3,16 @@
 parameters:
   - name: azureSubscription
     type: string
+  - name: beStorageAccountName
+    type: string
+  - name: beContainerName
+    type: string
+  - name: beKey
+    type: string
+  - name: beResourceGroupName
+    type: string
+  - name: beSubscriptionId
+    type: string
   - name: destroyMode
     type: boolean
   - name: destroyModeLocal
@@ -63,4 +73,9 @@ steps:
       addSpnToEnvironment: true
     displayName: 'Run terraform init'
     env:
+      STATE_STORAGE_ACCOUNT_NAME: ${{ parameters.beStorageAccountName }}
+      STATE_CONTAINER_NAME: ${{ parameters.beContainerName }}
+      STATE_KEY: ${{ parameters.beKey }}
+      STATE_RESOURCE_GROUP_NAME: ${{ parameters.beResourceGroupName }}
+      STATE_SUBSCRIPTION_ID: ${{ parameters.beSubscriptionId }}
       ${{ parameters.terraformTfVars}}

@@ -3,6 +3,16 @@
 parameters:
   - name: azureSubscription
     type: string
+  - name: beStorageAccountName
+    type: string
+  - name: beContainerName
+    type: string
+  - name: beKey
+    type: string
+  - name: beResourceGroupName
+    type: string
+  - name: beSubscriptionId
+    type: string
   - name: checkout
     type: object
   - name: container
@@ -37,6 +47,11 @@ jobs:
       - template: ../steps/terraform-init.yml
         parameters:
           azureSubscription: ${{ parameters.azureSubscription }}
+          beStorageAccountName: ${{ parameters.beStorageAccountName }}
+          beContainerName: ${{ parameters.beContainerName }}
+          beKey: ${{ parameters.beKey }}
+          beResourceGroupName: ${{ parameters.beResourceGroupName }}
+          beSubscriptionId: ${{ parameters.beSubscriptionId }}
           destroyMode: ${{ parameters.destroyMode }}
           destroyModeLocal: ${{ parameters.destroyModeLocal }}
           environmentName: ${{ parameters.environmentName }}

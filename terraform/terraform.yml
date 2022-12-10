@@ -1,9 +1,9 @@
 ---
 
 parameters:
-  - name: azureSubscription
-    type: string
-    default: ''
+  # - name: azureSubscription
+  #   type: string
+  #   default: ''
   - name: container
     type: string
     default: ''
@@ -24,15 +24,24 @@ parameters:
     type: object
     default:
       demo:
+        azureSubscription: "demo-vmss"
+        beStorageAccountName:
+        beContainerName:
+        beKey:
+        beResourceGroupName:
+        beSubscriptionId:
         dependsOn: []
         environmentName: "demo"
       dev:
+        azureSubscription: "dev"
         dependsOn: []
         environmentName: "dev"
       test:
+        azureSubscription: "test"
         dependsOn: [dev]
         environmentName: "test"
       prod:
+        azureSubscription: "prod"
         dependsOn: [dev, test]
         environmentName: "prod"
   - name: initCheckout
@@ -83,7 +92,7 @@ stages:
 
   - template: stages/terraform-environments.yml
     parameters:
-      azureSubscription: ${{ parameters.azureSubscription }}
+      # azureSubscription: ${{ parameters.azureSubscription }}
       container: ${{ parameters.container }}
       destroyMode: ${{ parameters.destroyMode }}
       destroyModeLocal: ${{ parameters.destroyModeLocal }}
