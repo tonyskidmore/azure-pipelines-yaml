@@ -45,6 +45,10 @@ steps:
     env:
       ${{ parameters.terraformTfVars}}
 
+  - script: |
+      echo "##vso[task.setvariable variable=ENV_PARAMS;]${{ convertToJson(parameters.environmentParameters) }}"
+    displayName: Get environmentParameters
+
   - task: Bash@3
     inputs:
       filePath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-install.sh'
