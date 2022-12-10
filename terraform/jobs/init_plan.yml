@@ -23,6 +23,8 @@ parameters:
     type: boolean
   - name: environmentName
     type: string
+  - name: environmentParameters
+    type: object
   - name: poolName
     type: string
   - name: terraformVersion
@@ -55,6 +57,7 @@ jobs:
           destroyMode: ${{ parameters.destroyMode }}
           destroyModeLocal: ${{ parameters.destroyModeLocal }}
           environmentName: ${{ parameters.environmentName }}
+          environmentParameters: ${{ parameters.environmentParameters }}
           terraformVersion: ${{ parameters.terraformVersion }}
           checkout: ${{ parameters.checkout }}
           terraformDirectory: ${{ parameters.terraformDirectory }}

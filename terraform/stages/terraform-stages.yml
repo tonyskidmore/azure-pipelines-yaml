@@ -27,6 +27,8 @@ parameters:
     type: string
   - name: environmentDependsOn
     type: object
+  - name: environmentParameters
+    type: object
   - name: dependsOn
     type: object
   - name: initCheckout
@@ -60,6 +62,7 @@ stages:
         environment: ${{ parameters.environment }}
         environmentName: ${{ parameters.environmentName }}
         environmentDependsOn: ${{ parameters.environmentDependsOn }}
+        environmentParameters: ${{ parameters.environmentParameters }}
         condition: ${{ parameters.stageParameters[stage].condition }}
         parentDependsOn: ${{ parameters.dependsOn }}
         dependsOn: ${{ parameters.stageParameters[stage].dependsOn }}

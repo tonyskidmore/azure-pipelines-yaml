@@ -8,6 +8,8 @@ tf_dir="$1"
 tf_destroy_mode="$2"
 tf_destroy_local="$3"
 
+echo "$ENV_PARAMS" | jq
+
 printf "Terraform working directory: %s\n" "$tf_dir"
 printf "Terraform destroy mode: %s\n" "$tf_destroy_mode"
 printf "Terraform local destroy: %s\n" "$tf_destroy_local"

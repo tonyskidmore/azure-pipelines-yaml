@@ -33,6 +33,8 @@ parameters:
     type: string
   - name: environmentDependsOn
     type: object
+  - name: environmentParameters
+    type: object
   - name: condition
     type: string
   - name: stage
@@ -85,6 +87,7 @@ stages:
           destroyMode: ${{ parameters.destroyMode }}
           destroyModeLocal: ${{ parameters.destroyModeLocal }}
           environmentName: ${{ parameters.environmentName }}
+          environmentParameters: ${{ parameters.environmentParameters }}
           poolName: ${{ parameters.poolName }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
           terraformTfVars: ${{ parameters.terraformTfVars }}

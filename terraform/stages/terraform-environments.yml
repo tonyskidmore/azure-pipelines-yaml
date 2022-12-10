@@ -1,8 +1,8 @@
 ---
 
 parameters:
-  - name: azureSubscription
-    type: string
+  # - name: azureSubscription
+  #   type: string
   - name: container
     type: string
   - name: poolName
@@ -44,6 +44,7 @@ stages:
         destroyModeLocal: ${{ parameters.destroyModeLocal }}
         poolName: ${{ parameters.poolName }}
         environment: ${{ environment }}
+        environmentParameters: ${{ parameters.environmentParameters[environment] }}
         environmentDependsOn: ${{ parameters.environmentParameters[environment].dependsOn }}
         environmentName: ${{ parameters.environmentParameters[environment].environmentName }}
         dependsOn: ${{ parameters.dependsOn }}
