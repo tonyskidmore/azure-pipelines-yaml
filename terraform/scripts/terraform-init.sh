@@ -10,6 +10,7 @@ tf_destroy_local="$3"
 
 echo "Envrionment Parameters"
 echo "$ENV_PARAMS"
+echo "$ENV_PARAMS" | jq
 
 printf "Terraform working directory: %s\n" "$tf_dir"
 printf "Terraform destroy mode: %s\n" "$tf_destroy_mode"
