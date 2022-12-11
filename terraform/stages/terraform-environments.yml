@@ -34,11 +34,11 @@ stages:
     - template: ../stages/terraform-stages.yml
       parameters:
         azureSubscription: ${{ parameters.environmentParameters[environment].azureSubscription }}
-        beStorageAccountName: ${{ parameters.environmentParameters[environment].beStorageAccountName }}
-        beContainerName: ${{ parameters.environmentParameters[environment].beContainerName }}
-        beKey: ${{ parameters.environmentParameters[environment].beKey }}
-        beResourceGroupName: ${{ parameters.environmentParameters[environment].beResourceGroupName }}
-        beSubscriptionId: ${{ parameters.environmentParameters[environment].beSubscriptionId }}
+        # beStorageAccountName: ${{ parameters.environmentParameters[environment].beStorageAccountName }}
+        # beContainerName: ${{ parameters.environmentParameters[environment].beContainerName }}
+        # beKey: ${{ parameters.environmentParameters[environment].beKey }}
+        # beResourceGroupName: ${{ parameters.environmentParameters[environment].beResourceGroupName }}
+        # beSubscriptionId: ${{ parameters.environmentParameters[environment].beSubscriptionId }}
         container: ${{ parameters.container }}
         destroyMode: ${{ parameters.destroyMode }}
         destroyModeLocal: ${{ parameters.destroyModeLocal }}

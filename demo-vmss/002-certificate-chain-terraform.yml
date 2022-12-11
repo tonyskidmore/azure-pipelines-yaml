@@ -43,7 +43,7 @@ stages:
       - git://$(project)/module@refs/heads/examples
       # - git://$(project)/module
     poolName: 'vmss-bootstrap-pool'
-    terraformDirectory: '$(System.DefaultWorkingDirectory)/module/examples/002-certificate-chain'
+    terraformDirectory: '$(System.DefaultWorkingDirectory)/module/examples/002-certificate_chain'
     terraformTfVars:
       AZ_SUBSCRIPTION: $(azurerm_subscription_id)
       AZDO_PERSONAL_ACCESS_TOKEN: $(ado_ext_pat)

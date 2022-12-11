@@ -3,16 +3,16 @@
 parameters:
   - name: azureSubscription
     type: string
-  - name: beStorageAccountName
-    type: string
-  - name: beContainerName
-    type: string
-  - name: beKey
-    type: string
-  - name: beResourceGroupName
-    type: string
-  - name: beSubscriptionId
-    type: string
+  # - name: beStorageAccountName
+  #   type: string
+  # - name: beContainerName
+  #   type: string
+  # - name: beKey
+  #   type: string
+  # - name: beResourceGroupName
+  #   type: string
+  # - name: beSubscriptionId
+  #   type: string
   - name: destroyMode
     type: boolean
   - name: destroyModeLocal
@@ -59,7 +59,7 @@ steps:
     inputs:
       filePath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-install.sh'
       arguments: '${{ parameters.terraformVersion }}'
-      workingDirectory: '${{ parameters.terraformDirectory }}'
+      # workingDirectory: '${{ parameters.terraformDirectory }}'
     displayName: 'Install Terraform: ${{ parameters.terraformVersion }}'
 
   - task: AzureCLI@2

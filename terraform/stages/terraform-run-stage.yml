@@ -3,16 +3,16 @@
 parameters:
   - name: azureSubscription
     type: string
-  - name: beStorageAccountName
-    type: string
-  - name: beContainerName
-    type: string
-  - name: beKey
-    type: string
-  - name: beResourceGroupName
-    type: string
-  - name: beSubscriptionId
-    type: string
+  # - name: beStorageAccountName
+  #   type: string
+  # - name: beContainerName
+  #   type: string
+  # - name: beKey
+  #   type: string
+  # - name: beResourceGroupName
+  #   type: string
+  # - name: beSubscriptionId
+  #   type: string
   - name: container
     type: string
   - name: destroyMode
@@ -78,11 +78,11 @@ stages:
       - template: ../jobs/init_plan.yml
         parameters:
           azureSubscription: ${{ parameters.azureSubscription }}
-          beStorageAccountName: ${{ parameters.beStorageAccountName }}
-          beContainerName: ${{ parameters.beContainerName }}
-          beKey: ${{ parameters.beKey }}
-          beResourceGroupName: ${{ parameters.beResourceGroupName }}
-          beSubscriptionId: ${{ parameters.beSubscriptionId }}
+          # beStorageAccountName: ${{ parameters.beStorageAccountName }}
+          # beContainerName: ${{ parameters.beContainerName }}
+          # beKey: ${{ parameters.beKey }}
+          # beResourceGroupName: ${{ parameters.beResourceGroupName }}
+          # beSubscriptionId: ${{ parameters.beSubscriptionId }}
           container: ${{ parameters.container }}
           checkout: ${{ parameters.initCheckout }}
           destroyMode: ${{ parameters.destroyMode }}
