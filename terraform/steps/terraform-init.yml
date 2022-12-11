@@ -46,10 +46,14 @@ steps:
       ${{ parameters.terraformTfVars}}
 
   - script: |
-      echo "parameter json"
-      echo "${{ convertToJson(parameters.environmentParameters) }}"
-      echo "##vso[task.setvariable variable=ENV_PARAMS;]${{ convertToJson(parameters.environmentParameters) }}"
+      set -e
+      # get compact JSON of environmentParameters, strip out dependsOn as it is not needed and will cause an error
+      compact_json=$(jq  --compact-output -r 'del(.dependsOn)' <<< "$JSON")
+      echo "$compact_json"
+      echo "##vso[task.setvariable variable=ENV_PARAMS;]$compact_json"
     displayName: Get environmentParameters
+    env:
+      JSON: ${{ convertToJson(parameters.environmentParameters) }}
 
   - task: Bash@3
     inputs:
