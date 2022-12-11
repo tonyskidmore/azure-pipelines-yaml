@@ -59,7 +59,7 @@ steps:
     inputs:
       filePath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-install.sh'
       arguments: '${{ parameters.terraformVersion }}'
-      # workingDirectory: '${{ parameters.terraformDirectory }}'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
     displayName: 'Install Terraform: ${{ parameters.terraformVersion }}'
 
   - task: AzureCLI@2
