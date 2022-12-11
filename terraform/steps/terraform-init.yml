@@ -46,8 +46,6 @@ steps:
       ${{ parameters.terraformTfVars}}
 
   - script: |
-      echo "parameter"
-      echo ${{ parameters.environmentParameters }}
       echo "parameter json"
       echo "${{ convertToJson(parameters.environmentParameters) }}"
       echo "##vso[task.setvariable variable=ENV_PARAMS;]${{ convertToJson(parameters.environmentParameters) }}"
