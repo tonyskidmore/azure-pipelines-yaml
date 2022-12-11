@@ -57,9 +57,10 @@ stages:
     dependsOn:
       - ${{ each depParent in parameters.parentDependsOn }}:
         - ${{ depParent }}
-      - ${{ each depEnv in parameters.environmentDependsOn }}:
-        - ${{ each dep in parameters.dependsOn }}:
-          - ${{ depEnv }}_${{ dep }}
+      - ${{ if gt(length(parameters.environmentDependsOn),0) }}:
+        - ${{ each depEnv in parameters.environmentDependsOn }}:
+          - ${{ each dep in parameters.dependsOn }}:
+            - ${{ depEnv }}_${{ dep }}
       - ${{ each dep in parameters.dependsOn }}:
         - ${{ parameters.environmentName }}_${{ dep }}
     ${{ if gt(length(parameters.condition),0) }}:

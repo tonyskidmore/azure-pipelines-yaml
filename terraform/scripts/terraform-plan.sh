@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -e
 
 tf_dir="$1"
 tf_destroy="$2"
