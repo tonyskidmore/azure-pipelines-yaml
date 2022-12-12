@@ -24,5 +24,16 @@ jobs:
           PYTHON_VERSION: '3.7'
       maxParallel: 3
     steps:
+
     - checkout: none
-    - script: echo $(PYTHON_VERSION)
+
+    - script: |
+        echo $(PYTHON_VERSION)
+        hostname
+      displayName: Matrix output
+
+    - script: |
+        apt update
+        apt install -y jq
+        curl -s -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2021-02-01" | jq
+      displayName: Get Instance Metadata Service
