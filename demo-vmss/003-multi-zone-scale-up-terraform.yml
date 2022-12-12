@@ -16,12 +16,12 @@ trigger: none
 schedules:
   # https://crontab.guru
   # Note: UTC time
-  - cron: "0 8 * * *"
+  - cron: "0 8 * * 1-5"
     always: true
     displayName: Scale up
     branches:
       include:
-        - main
+        - examples # TODO:
 
 variables:
 - group: build
@@ -47,14 +47,14 @@ stages:
         beSubscriptionId: $(azurerm_subscription_id)
         dependsOn: []
         environmentName: "demo"
-        planCommandOptions: '-var-file=$(System.DefaultWorkingDirectory)/module/examples/003-multi-zone/scale/scale-up.tfvars'
+        planCommandOptions: '-var-file=$(System.DefaultWorkingDirectory)/module/examples/003-multi_zone/scale/scale-up.tfvars'
     initCheckout:
       - self
       # TODO:
       - git://$(project)/module@refs/heads/examples
       # - git://$(project)/module
     poolName: 'vmss-bootstrap-pool'
-    terraformDirectory: '$(System.DefaultWorkingDirectory)/module/examples/003-multi-zone'
+    terraformDirectory: '$(System.DefaultWorkingDirectory)/module/examples/003-multi_zone'
     terraformTfVars:
       AZ_SUBSCRIPTION: $(azurerm_subscription_id)
       AZDO_PERSONAL_ACCESS_TOKEN: $(ado_ext_pat)

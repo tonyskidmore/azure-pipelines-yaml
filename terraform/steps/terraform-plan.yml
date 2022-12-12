@@ -7,6 +7,8 @@ parameters:
     type: boolean
   - name: environmentName
     type: string
+  - name: environmentParameters
+    type: object
   - name: terraformDirectory
     type: string
   - name: terraformTfVars
