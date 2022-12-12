@@ -21,7 +21,6 @@ steps:
     env:
       ${{ parameters.terraformTfVars}}
 
-
   - task: AzureCLI@2
     inputs:
       azureSubscription: '${{ parameters.azureSubscription }}'

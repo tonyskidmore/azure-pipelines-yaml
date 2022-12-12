@@ -67,6 +67,7 @@ jobs:
         parameters:
           azureSubscription: ${{ parameters.azureSubscription }}
           environmentName: ${{ parameters.environmentName }}
+          environmentParameters: ${{ parameters.environmentParameters }}
           destroyMode: ${{ parameters.destroyMode }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
           terraformTfVars: ${{ parameters.terraformTfVars }}
