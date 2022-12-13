@@ -33,7 +33,7 @@ jobs:
       displayName: Matrix output
 
     - script: |
-        apt update
-        apt install -y jq
+        sudo apt update
+        sudo apt install -y jq
         curl -s -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2021-02-01" | jq
       displayName: Get Instance Metadata Service
