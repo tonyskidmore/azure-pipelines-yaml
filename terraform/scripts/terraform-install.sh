@@ -1,18 +1,9 @@
 #!/bin/bash
 
-# functions
+set -euo pipefail
+SYSTEM_DEFAULTWORKINGDIRECTORY=${SYSTEM_DEFAULTWORKINGDIRECTORY:-}
 
-check_command () {
-  # Determine if command is installed
-  cmd_bin=$(command -v "${1}" 2>/dev/null)
-  printf "${1} path: %s\n" "${cmd_bin:-Not found}"
-  if [[ -z "${cmd_bin}" ]]
-  then
-    cmd_installed=1
-  else
-    cmd_installed=0
-  fi
-}
+# functions
 
 build_params() {
 
@@ -83,11 +74,33 @@ install_teraform() {
 
   local tf_version="$1"
 
-  wget --quiet "https://releases.hashicorp.com/terraform/${tf_version}/terraform_${tf_version}_linux_amd64.zip"
-  unzip "terraform_${tf_version}_linux_amd64.zip"
-  rm "terraform_${tf_version}_linux_amd64.zip"
-  sudo cp terraform "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-  sudo mv terraform /usr/bin
+  tf_zip_filename="terraform_${tf_version}_linux_amd64.zip"
+  tf_checksum_filename="terraform_${tf_version}_SHA256SUMS"
+  tf_download_url="https://releases.hashicorp.com/terraform/${tf_version}/${tf_zip_filename}"
+  tf_checksum_url="https://releases.hashicorp.com/terraform/${tf_version}/${tf_checksum_filename}"
+
+  printf "Downloading Terraform from: %s\n" "$tf_download_url"
+  wget "$tf_download_url" -O "$tf_zip_filename" --tries=5 --waitretry=3
+  printf "Downloading Terraform checksums from: %s\n" "$tf_checksum_url"
+  wget "$tf_checksum_url" -O "$tf_checksum_filename" --tries=5 --waitretry=3
+
+  sha256sum --ignore-missing -c "$tf_checksum_filename"
+
+  printf "Extracting: %s\n" "$tf_zip_filename"
+  unzip -o "$tf_zip_filename"
+
+  if [[ -n "$SYSTEM_DEFAULTWORKINGDIRECTORY" ]]
+  then
+    printf "Copying %s to %s\n" "$tf_zip_filename" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+    sudo cp terraform "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+  fi
+
+  tf_dest="/usr/local/bin"
+  printf "Moving terraform to %s\n" "$tf_dest"
+  sudo mv terraform "$tf_dest"
+
+  rm "$tf_zip_filename"
+  rm "$tf_checksum_filename"
 
 }
 
@@ -99,15 +112,18 @@ tf_require_version=$1
 if [[ "$tf_require_version" == "latest" ]]
 then
   rest_api_call "GET" "https://checkpoint-api.hashicorp.com/v1/check/terraform"
-  tf_require_version=$(echo "$out" | jq -r '.current_version')
+  tf_latest_version=$(echo "$out" | jq -r '.current_version')
+  tf_install_version="$tf_latest_version"
+else
+  tf_install_version="$tf_require_version"
 fi
 
 echo "Checking if terraform is installed"
-check_command "terraform"
-if [[ ${cmd_installed} -eq 0 ]]
+# check_command "terraform"
+if ! command -v terraform
 then
   echo "Terraform not currently installed, installing "
-  install_teraform "$tf_require_version"
+  install_teraform "$tf_install_version"
 else
   echo "Terraform already installed"
 fi
@@ -116,13 +132,15 @@ fi
 tf_version=$(terraform version -json | jq -r '.terraform_version')
 
 printf "Currently installed Terraform version: %s\n"  "$tf_version"
+printf "Required Terraform version: %s\n"  "$tf_require_version"
+printf "Terraform version to install: %s\n"  "$tf_install_version"
 
-if [[ "$tf_version" == "tf_require_version" ]]
+if [[ "$tf_version" == "$tf_install_version" ]] || [[ "$tf_require_version" == "latest" && "$tf_version" == "$tf_latest_version" ]]
 then
   echo "Currently installed Terraform satisfies requirements"
 else
   echo "Currently installed Terraform does not satisfy requirements, installing "
-  install_teraform "$tf_require_version"
+  install_teraform "$tf_install_version"
 fi
 
-terraform version
+terraform version -json
