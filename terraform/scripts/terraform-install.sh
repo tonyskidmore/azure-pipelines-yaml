@@ -74,10 +74,14 @@ install_teraform() {
 
   local tf_version="$1"
 
+
+
   tf_zip_filename="terraform_${tf_version}_linux_amd64.zip"
   tf_checksum_filename="terraform_${tf_version}_SHA256SUMS"
   tf_download_url="https://releases.hashicorp.com/terraform/${tf_version}/${tf_zip_filename}"
   tf_checksum_url="https://releases.hashicorp.com/terraform/${tf_version}/${tf_checksum_filename}"
+
+  rm -f "$tf_zip_filename"
 
   printf "Downloading Terraform from: %s\n" "$tf_download_url"
   wget "$tf_download_url" -O "$tf_zip_filename" --tries=5 --waitretry=3
@@ -87,7 +91,7 @@ install_teraform() {
   sha256sum --ignore-missing -c "$tf_checksum_filename"
 
   printf "Extracting: %s\n" "$tf_zip_filename"
-  unzip -o "$tf_zip_filename"
+  unzip "$tf_zip_filename"
 
   if [[ -n "$SYSTEM_DEFAULTWORKINGDIRECTORY" ]]
   then
@@ -99,8 +103,8 @@ install_teraform() {
   printf "Moving terraform to %s\n" "$tf_dest"
   sudo mv terraform "$tf_dest"
 
-  rm "$tf_zip_filename"
-  rm "$tf_checksum_filename"
+  rm -f "$tf_zip_filename"
+  rm -f "$tf_checksum_filename"
 
 }
 
