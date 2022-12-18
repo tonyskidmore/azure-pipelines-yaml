@@ -91,8 +91,12 @@ install_teraform() {
   echo "Validating downloaded file checksum"
   sha256sum --ignore-missing -c "$tf_checksum_filename"
 
+  printf "Working directory: %s\n" "$PWD"
   printf "Extracting: %s\n" "$tf_zip_filename"
-  unzip -q "$tf_zip_filename"
+  unzip -q "${PWD}/${tf_zip_filename}"
+
+  # TODO: remove
+  ls -al
 
   if [[ -n "$SYSTEM_DEFAULTWORKINGDIRECTORY" ]]
   then
