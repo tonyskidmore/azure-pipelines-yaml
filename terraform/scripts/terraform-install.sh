@@ -88,10 +88,11 @@ install_teraform() {
   printf "Downloading Terraform checksums from: %s\n" "$tf_checksum_url"
   wget "$tf_checksum_url" -O "$tf_checksum_filename" --tries=5 --waitretry=3
 
+  echo "Validating downloaded file checksum"
   sha256sum --ignore-missing -c "$tf_checksum_filename"
 
   printf "Extracting: %s\n" "$tf_zip_filename"
-  unzip "$tf_zip_filename"
+  unzip -q "$tf_zip_filename"
 
   if [[ -n "$SYSTEM_DEFAULTWORKINGDIRECTORY" ]]
   then
