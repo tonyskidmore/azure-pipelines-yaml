@@ -42,8 +42,8 @@ jobs:
       displayName: Matrix output
 
     - script: |
-        sudo apt update
-        sudo apt install -y jq
+        sudo apt update > /dev/null 2>&1
+        sudo apt install -y jq > /dev/null 2>&1
         metadata=$(curl -s -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2021-02-01")
         zone=$(jq -r '.compute.zone' <<< "$metadata")
         printf "Running in zone: %s\n" "$zone"
