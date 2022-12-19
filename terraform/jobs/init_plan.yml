@@ -57,7 +57,6 @@ jobs:
           destroyModeLocal: ${{ parameters.destroyModeLocal }}
           environmentName: ${{ parameters.environmentName }}
           environmentParameters: ${{ parameters.environmentParameters }}
-          terraformVersion: ${{ parameters.terraformVersion }}
           checkout: ${{ parameters.checkout }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
           terraformTfVars: ${{ parameters.terraformTfVars }}

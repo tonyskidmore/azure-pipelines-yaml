@@ -73,49 +73,45 @@ rest_api_call() {
 install_teraform() {
 
   local tf_version="$1"
-
-
+  working_dir='/tmp'
+  tf_dest="/usr/local/bin"
 
   tf_zip_filename="terraform_${tf_version}_linux_amd64.zip"
   tf_checksum_filename="terraform_${tf_version}_SHA256SUMS"
   tf_download_url="https://releases.hashicorp.com/terraform/${tf_version}/${tf_zip_filename}"
   tf_checksum_url="https://releases.hashicorp.com/terraform/${tf_version}/${tf_checksum_filename}"
 
-  rm -f "$tf_zip_filename"
+  printf "Working directory: %s\n" "$working_dir"
 
   printf "Downloading Terraform from: %s\n" "$tf_download_url"
-  wget "$tf_download_url" -O "$tf_zip_filename" --tries=5 --waitretry=3
+  wget "$tf_download_url" -O "${working_dir}/${tf_zip_filename}" --tries=5 --waitretry=3
   printf "Downloading Terraform checksums from: %s\n" "$tf_checksum_url"
-  wget "$tf_checksum_url" -O "$tf_checksum_filename" --tries=5 --waitretry=3
+  wget "$tf_checksum_url" -O "${working_dir}/${tf_checksum_filename}" --tries=5 --waitretry=3
 
   echo "Validating downloaded file checksum"
-  sha256sum --ignore-missing -c "$tf_checksum_filename"
+  sha256sum --ignore-missing -c "${working_dir}/${tf_checksum_filename}"
 
   echo "View file $tf_zip_filename"
-  file "$tf_zip_filename"
+  file "${working_dir}/${tf_zip_filename}"
 
   echo "Unzip test $tf_zip_filename"
-  unzip -t "$tf_zip_filename"
+  unzip -t "${working_dir}/${tf_zip_filename}"
 
-  printf "Working directory: %s\n" "$PWD"
   printf "Extracting: %s\n" "$tf_zip_filename"
-  unzip "${PWD}/${tf_zip_filename}"
-
-  # TODO: remove
-  ls -al
+  unzip -o "${working_dir}/${tf_zip_filename}" -d "$working_dir"
 
   if [[ -n "$SYSTEM_DEFAULTWORKINGDIRECTORY" ]]
   then
     printf "Copying %s to %s\n" "$tf_zip_filename" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-    sudo cp terraform "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+    sudo cp "${working_dir}/terraform" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
   fi
 
-  tf_dest="/usr/local/bin"
-  printf "Moving terraform to %s\n" "$tf_dest"
-  sudo mv terraform "$tf_dest"
 
-  rm -f "$tf_zip_filename"
-  rm -f "$tf_checksum_filename"
+  printf "Moving terraform to %s\n" "$tf_dest"
+  sudo mv "${working_dir}/terraform "$tf_dest"
+
+  rm -f "${working_dir}/${tf_zip_filename}"
+  rm -f "${working_dir}/${tf_checksum_filename}"
 
 }
 

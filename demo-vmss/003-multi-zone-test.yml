@@ -13,7 +13,7 @@ pool:
   name: 'vmss-agent-pool-linux-003'
 
 jobs:
-  - job: Build
+  - job: Plan
     strategy:
       matrix:
         Terraform11:
@@ -25,7 +25,11 @@ jobs:
       maxParallel: 3
     steps:
 
-    - checkout: self
+    - checkout:
+      - self
+      # TODO:
+      - git://$(project)/module@refs/heads/examples
+      # - git://$(project)/module
 
     - script: |
         env
@@ -60,7 +64,7 @@ jobs:
     - script: |
         terraform init
         terraform plan
-      workingDirectory: $(System.DefaultWorkingDirectory)/examples/003-multi_zone/terraform
+      workingDirectory: $(System.DefaultWorkingDirectory)/module/examples/003-multi_zone/terraform
       displayName: Terraform plan
       env:
         TF_IN_AUTOMATION: true
