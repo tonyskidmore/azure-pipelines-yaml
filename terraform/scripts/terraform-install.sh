@@ -89,7 +89,10 @@ install_teraform() {
   wget "$tf_checksum_url" -O "${working_dir}/${tf_checksum_filename}" --tries=5 --waitretry=3
 
   echo "Validating downloaded file checksum"
-  sha256sum --ignore-missing -c "${working_dir}/${tf_checksum_filename}"
+  pushd .
+  cd "$working_dir"
+  sha256sum --ignore-missing -c "$tf_checksum_filename"
+  popd
 
   echo "View file $tf_zip_filename"
   file "${working_dir}/${tf_zip_filename}"
@@ -102,12 +105,12 @@ install_teraform() {
 
   if [[ -n "$SYSTEM_DEFAULTWORKINGDIRECTORY" ]]
   then
-    printf "Copying %s to %s\n" "$tf_zip_filename" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+    printf "Copying terraform to %s\n" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
     sudo cp "${working_dir}/terraform" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
   fi
 
   printf "Moving terraform to %s\n" "$tf_dest"
-  sudo mv "${working_dir}/terraform "$tf_dest"
+  sudo mv "${working_dir}/terraform" "$tf_dest"
 
   rm -f "${working_dir}/${tf_zip_filename}"
   rm -f "${working_dir}/${tf_checksum_filename}"

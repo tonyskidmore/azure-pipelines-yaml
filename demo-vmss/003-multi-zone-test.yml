@@ -25,10 +25,9 @@ jobs:
       maxParallel: 3
     steps:
 
-    - checkout:
-      - self
+    - checkout: self
       # TODO:
-      - git://$(project)/module@refs/heads/examples
+    - checkout: git://$(project)/module@refs/heads/examples
       # - git://$(project)/module
 
     - script: |
@@ -43,7 +42,7 @@ jobs:
 
     - script: |
         sudo apt update > /dev/null 2>&1
-        sudo apt install -y jq > /dev/null 2>&1
+        sudo apt install -y jq unzip > /dev/null 2>&1
         metadata=$(curl -s -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2021-02-01")
         zone=$(jq -r '.compute.zone' <<< "$metadata")
         printf "Running in zone: %s\n" "$zone"
