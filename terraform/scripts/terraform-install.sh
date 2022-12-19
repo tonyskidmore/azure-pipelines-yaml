@@ -106,7 +106,6 @@ install_teraform() {
     sudo cp "${working_dir}/terraform" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
   fi
 
-
   printf "Moving terraform to %s\n" "$tf_dest"
   sudo mv "${working_dir}/terraform "$tf_dest"
 
