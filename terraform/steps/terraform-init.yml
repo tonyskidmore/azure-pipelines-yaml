@@ -23,12 +23,12 @@ parameters:
     type: object
   - name: terraformDirectory
     type: string
-  - name: terraformVersion
-    type: string
   - name: checkout
     type: object
   - name: terraformTfVars
     type: object
+  - name: terraformVersion
+    type: string
 
 steps:
 

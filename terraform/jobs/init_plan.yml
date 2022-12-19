@@ -27,13 +27,12 @@ parameters:
     type: object
   - name: poolName
     type: string
-  - name: terraformVersion
-    type: string
-    default: 'latest'
   - name: terraformDirectory
     type: string
   - name: terraformTfVars
     type: object
+  - name: terraformVersion
+    type: string
 
 
 jobs:
@@ -62,6 +61,7 @@ jobs:
           checkout: ${{ parameters.checkout }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
           terraformTfVars: ${{ parameters.terraformTfVars }}
+          terraformVersion: ${{ parameters.terraformVersion }}
 
       - template: ../steps/terraform-plan.yml
         parameters:

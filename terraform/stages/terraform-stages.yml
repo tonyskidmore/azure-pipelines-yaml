@@ -41,6 +41,8 @@ parameters:
     type: string
   - name: terraformTfVars
     type: object
+  - name: terraformVersion
+    type: string
 
 stages:
 
@@ -69,3 +71,4 @@ stages:
         initCheckout: ${{ parameters.initCheckout }}
         terraformDirectory: ${{ parameters.terraformDirectory }}
         terraformTfVars: ${{ parameters.terraformTfVars }}
+        terraformVersion: ${{ parameters.terraformVersion }}

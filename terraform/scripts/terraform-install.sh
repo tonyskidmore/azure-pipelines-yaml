@@ -91,9 +91,15 @@ install_teraform() {
   echo "Validating downloaded file checksum"
   sha256sum --ignore-missing -c "$tf_checksum_filename"
 
+  echo "View file $tf_zip_filename"
+  file "$tf_zip_filename"
+
+  echo "Unzip test $tf_zip_filename"
+  unzip -t "$tf_zip_filename"
+
   printf "Working directory: %s\n" "$PWD"
   printf "Extracting: %s\n" "$tf_zip_filename"
-  unzip -q "${PWD}/${tf_zip_filename}"
+  unzip "${PWD}/${tf_zip_filename}"
 
   # TODO: remove
   ls -al

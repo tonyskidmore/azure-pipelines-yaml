@@ -88,6 +88,9 @@ parameters:
   - name: terraformTfVars
     type: object
     default: {}
+  - name: terraformVersion
+    type: string
+    default: 'latest'
 
 stages:
 
@@ -106,3 +109,4 @@ stages:
       poolName: ${{ parameters.poolName }}
       terraformDirectory: ${{ parameters.terraformDirectory }}
       terraformTfVars: ${{ parameters.terraformTfVars }}
+      terraformVersion: ${{ parameters.terraformVersion }}

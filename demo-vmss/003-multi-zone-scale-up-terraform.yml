@@ -55,6 +55,7 @@ stages:
       # - git://$(project)/module
     poolName: 'vmss-bootstrap-pool'
     terraformDirectory: '$(System.DefaultWorkingDirectory)/module/examples/003-multi_zone'
+    terraformVersion: '1.3.5'
     terraformTfVars:
       AZ_SUBSCRIPTION: $(azurerm_subscription_id)
       AZDO_PERSONAL_ACCESS_TOKEN: $(ado_ext_pat)
