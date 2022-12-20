@@ -74,7 +74,6 @@ install_teraform() {
 
   local tf_version="$1"
   working_dir='/tmp'
-  tf_dest="/usr/local/bin"
 
   tf_zip_filename="terraform_${tf_version}_linux_amd64.zip"
   tf_checksum_filename="terraform_${tf_version}_SHA256SUMS"
@@ -115,6 +114,7 @@ install_teraform() {
 
 
 tf_require_version=$1
+tf_dest="/usr/local/bin"
 
 if [[ "$tf_require_version" == "latest" ]]
 then
