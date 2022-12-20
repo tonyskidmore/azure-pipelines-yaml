@@ -103,12 +103,6 @@ install_teraform() {
   printf "Extracting: %s\n" "$tf_zip_filename"
   unzip -o "${working_dir}/${tf_zip_filename}" -d "$working_dir"
 
-  if [[ -n "$SYSTEM_DEFAULTWORKINGDIRECTORY" ]]
-  then
-    printf "Copying terraform to %s\n" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-    sudo cp "${working_dir}/terraform" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-  fi
-
   printf "Moving terraform to %s\n" "$tf_dest"
   sudo mv "${working_dir}/terraform" "$tf_dest"
 
@@ -126,6 +120,7 @@ if [[ "$tf_require_version" == "latest" ]]
 then
   rest_api_call "GET" "https://checkpoint-api.hashicorp.com/v1/check/terraform"
   tf_latest_version=$(echo "$out" | jq -r '.current_version')
+  printf "Latest available Terraform version: %s\n"  "$tf_latest_version"
   tf_install_version="$tf_latest_version"
 else
   tf_install_version="$tf_require_version"
@@ -141,7 +136,6 @@ else
   echo "Terraform already installed"
 fi
 
-
 tf_version=$(terraform version -json | jq -r '.terraform_version')
 
 printf "Currently installed Terraform version: %s\n"  "$tf_version"
@@ -154,6 +148,12 @@ then
 else
   echo "Currently installed Terraform does not satisfy requirements, installing "
   install_teraform "$tf_install_version"
+fi
+
+if [[ -n "$SYSTEM_DEFAULTWORKINGDIRECTORY" ]]
+then
+  printf "Copying terraform to %s\n" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+  sudo cp "${tf_dest}/terraform" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
 fi
 
 terraform version -json
