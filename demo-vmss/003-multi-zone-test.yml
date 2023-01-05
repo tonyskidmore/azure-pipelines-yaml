@@ -26,9 +26,8 @@ jobs:
     steps:
 
     - checkout: self
-      # TODO:
-    - checkout: git://$(project)/module@refs/heads/examples
-      # - git://$(project)/module
+    - checkout: git://$(project)/module
+    # - checkout: git://$(project)/module@refs/heads/examples
 
     - script: |
         env

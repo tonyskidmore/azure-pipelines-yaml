@@ -21,7 +21,7 @@ schedules:
     displayName: Scale up
     branches:
       include:
-        - examples # TODO:
+        - main
 
 variables:
 - group: build
@@ -50,9 +50,7 @@ stages:
         planCommandOptions: '-var-file=$(System.DefaultWorkingDirectory)/module/examples/003-multi_zone/scale/scale-up.tfvars'
     initCheckout:
       - self
-      # TODO:
-      - git://$(project)/module@refs/heads/examples
-      # - git://$(project)/module
+      - git://$(project)/module
     poolName: 'vmss-bootstrap-pool'
     terraformDirectory: '$(System.DefaultWorkingDirectory)/module/examples/003-multi_zone'
     terraformTfVars:

@@ -50,7 +50,7 @@ stages:
         - script: |
             git config --global user.email pipeline@azdo.com
             git config --global user.name "Azure DevOps Pipeline"
-            git checkout examples # TODO:
+            # git checkout examples
           displayName: Configure git
           workingDirectory: "$(System.DefaultWorkingDirectory)/module/demo_environment"
 
@@ -63,6 +63,6 @@ stages:
         - script: |
             git add -A
             git commit -m "Updating bootstrap"
-            git push --set-upstream origin examples # TODO: 
+            git push --set-upstream origin # examples
           displayName: Git commit updates
           workingDirectory: "$(System.DefaultWorkingDirectory)/module/demo_environment"
