@@ -1,0 +1,112 @@
+---
+
+parameters:
+  # - name: azureSubscription
+  #   type: string
+  #   default: ''
+  - name: container
+    type: string
+    default: ''
+  - name: dependsOn
+    type: object
+    default: []
+  - name: destroyMode
+    type: boolean
+    default: false
+  - name: destroyModeLocal
+    type: boolean
+    default: false
+  - name: environments
+    type: object
+    default:
+      - demo
+  - name: environmentParameters
+    type: object
+    default:
+      demo:
+        azureSubscription: "demo-vmss"
+        beStorageAccountName: ''
+        beContainerName: ''
+        beKey: ''
+        beResourceGroupName: ''
+        beSubscriptionId: ''
+        dependsOn: []
+        environmentName: "demo"
+        planCommandOptions: ''
+      dev:
+        azureSubscription: "dev"
+        dependsOn: []
+        environmentName: "dev"
+      test:
+        azureSubscription: "test"
+        dependsOn: [dev]
+        environmentName: "test"
+      prod:
+        azureSubscription: "prod"
+        dependsOn: [dev, test]
+        environmentName: "prod"
+  - name: initCheckout
+    type: object
+    default: []
+  - name: poolName
+    type: string
+    default: 'Azure Pipelines'
+  - name: stages
+    type: object
+    default:
+      - init_plan
+      - apply
+  - name: stageParameters
+    type: object
+    default:
+      init_plan:
+        dependsOn: []
+        stageName: "init_plan"
+        # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+        condition: succeeded()
+      apply:
+        dependsOn: [init_plan]
+        stageName: "apply"
+        # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+        condition: ''
+        # condition: and(
+        #               eq(dependencies.init_plan.outputs['init_plan.terraform_plan.tf_detailed_exit_code'], 2),
+        #               succeeded()
+        #             )
+        #           # or(
+        #           #     eq(variables['Build.SourceBranch'], 'refs/heads/main'),
+        #           #     eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+        #           #     eq('${{ parameters.tfApplyForceBranch }}', true)
+        #           # )
+      destroy:
+        dependsOn: [init_plan]
+        stageName: "destroy"
+        # condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+        condition: succeeded()
+  - name: terraformDirectory
+    type: string
+  - name: terraformTfVars
+    type: object
+    default: {}
+  - name: terraformVersion
+    type: string
+    default: 'latest'
+
+stages:
+
+  - template: stages/terraform-environments.yml
+    parameters:
+      # azureSubscription: ${{ parameters.azureSubscription }}
+      container: ${{ parameters.container }}
+      destroyMode: ${{ parameters.destroyMode }}
+      destroyModeLocal: ${{ parameters.destroyModeLocal }}
+      environments: ${{ parameters.environments }}
+      environmentParameters: ${{ parameters.environmentParameters }}
+      dependsOn: ${{ parameters.dependsOn }}
+      initCheckout: ${{ parameters.initCheckout }}
+      stages: ${{ parameters.stages }}
+      stageParameters: ${{ parameters.stageParameters }}
+      poolName: ${{ parameters.poolName }}
+      terraformDirectory: ${{ parameters.terraformDirectory }}
+      terraformTfVars: ${{ parameters.terraformTfVars }}
+      terraformVersion: ${{ parameters.terraformVersion }}

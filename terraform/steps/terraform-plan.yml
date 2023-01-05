@@ -1,0 +1,44 @@
+---
+
+parameters:
+  - name: azureSubscription
+    type: string
+  - name: destroyMode
+    type: boolean
+  - name: environmentName
+    type: string
+  - name: environmentParameters
+    type: object
+  - name: terraformDirectory
+    type: string
+  - name: terraformTfVars
+    type: object
+
+steps:
+
+  - script: |
+      env
+      ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+    displayName: Debug plan
+    env:
+      ${{ parameters.terraformTfVars}}
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '${{ parameters.azureSubscription }}'
+      scriptType: 'bash'
+      scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-plan.sh'
+      arguments: '${{ parameters.terraformDirectory }} ${{ parameters.destroyMode }}'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
+      addSpnToEnvironment: true
+    displayName: 'Run terraform plan'
+    name: terraform_plan
+    env:
+      ${{ parameters.terraformTfVars}}
+
+  - task: Cache@2
+    displayName: 'Register plan cache'
+    inputs:
+      key: 'terraform | plan | ${{ parameters.environmentName }} | "$(Agent.OS)" | "$(Build.BuildId)" | "$(Build.SourceVersion)"'
+      path: $(System.DefaultWorkingDirectory)
+    condition: and(succeeded(), eq(variables.TF_REQUIRED_CHANGES, 'true'))

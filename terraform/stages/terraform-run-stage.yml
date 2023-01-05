@@ -1,0 +1,123 @@
+---
+
+parameters:
+  - name: azureSubscription
+    type: string
+  # - name: beStorageAccountName
+  #   type: string
+  # - name: beContainerName
+  #   type: string
+  # - name: beKey
+  #   type: string
+  # - name: beResourceGroupName
+  #   type: string
+  # - name: beSubscriptionId
+  #   type: string
+  - name: container
+    type: string
+  - name: destroyMode
+    type: boolean
+  - name: destroyModeLocal
+    type: boolean
+  - name: poolName
+    type: string
+  - name: dependsOn
+    type: object
+  - name: initCheckout
+    type: object
+  - name: parentDependsOn
+    type: object
+  - name: environment
+    type: string
+  - name: environmentName
+    type: string
+  - name: environmentDependsOn
+    type: object
+  - name: environmentParameters
+    type: object
+  - name: condition
+    type: string
+  - name: stage
+    type: string
+  - name: stageName
+    type: string
+  - name: terraformDirectory
+    type: string
+  - name: terraformTfVars
+    type: object
+  - name: terraformVersion
+    type: string
+
+
+stages:
+
+  - stage: ${{ parameters.environment }}_${{ parameters.stageName }}
+    ${{ if and( eq(parameters.destroyMode, true), eq(parameters.stageName, 'apply') ) }}:
+      displayName: ${{ parameters.environment }}_destroy
+    pool:
+      name: ${{ parameters.poolName }}
+    dependsOn:
+      - ${{ each depParent in parameters.parentDependsOn }}:
+        - ${{ depParent }}
+      - ${{ if gt(length(parameters.environmentDependsOn),0) }}:
+        - ${{ each depEnv in parameters.environmentDependsOn }}:
+          - ${{ each dep in parameters.dependsOn }}:
+            - ${{ depEnv }}_${{ dep }}
+      - ${{ each dep in parameters.dependsOn }}:
+        - ${{ parameters.environmentName }}_${{ dep }}
+    ${{ if gt(length(parameters.condition),0) }}:
+      condition: ${{ parameters.condition }}
+    ${{ elseif eq(parameters.stageName, 'apply') }}:
+      condition: and(
+                    or(
+                      eq(dependencies.${{ parameters.environment }}_init_plan.outputs['init_plan.terraform_plan.tf_detailed_exit_code'], 2),
+                      eq(${{ parameters.destroyMode }}, true)
+                    ),
+                    succeeded()
+                  )
+    jobs:
+    - ${{ if eq(parameters['stage'], 'init_plan') }}:
+      - template: ../jobs/init_plan.yml
+        parameters:
+          azureSubscription: ${{ parameters.azureSubscription }}
+          # beStorageAccountName: ${{ parameters.beStorageAccountName }}
+          # beContainerName: ${{ parameters.beContainerName }}
+          # beKey: ${{ parameters.beKey }}
+          # beResourceGroupName: ${{ parameters.beResourceGroupName }}
+          # beSubscriptionId: ${{ parameters.beSubscriptionId }}
+          container: ${{ parameters.container }}
+          checkout: ${{ parameters.initCheckout }}
+          destroyMode: ${{ parameters.destroyMode }}
+          destroyModeLocal: ${{ parameters.destroyModeLocal }}
+          environmentName: ${{ parameters.environmentName }}
+          environmentParameters: ${{ parameters.environmentParameters }}
+          poolName: ${{ parameters.poolName }}
+          terraformDirectory: ${{ parameters.terraformDirectory }}
+          terraformTfVars: ${{ parameters.terraformTfVars }}
+          terraformVersion: ${{ parameters.terraformVersion }}
+    - ${{ if or( eq(parameters['stage'], 'apply'), eq(parameters['stage'], 'destroy') ) }}:
+      - template: ../jobs/apply.yml
+        parameters:
+          azureSubscription: ${{ parameters.azureSubscription }}
+          container: ${{ parameters.container }}
+          environmentName: ${{ parameters.environmentName }}
+          poolName: ${{ parameters.poolName }}
+          terraformDirectory: ${{ parameters.terraformDirectory }}
+          terraformTfVars: ${{ parameters.terraformTfVars }}
+    # - ${{ if eq(parameters['stage'], 'destroy') }}:
+    #   - template: ../jobs/apply.yml
+    #     parameters:
+    #       azureSubscription: ${{ parameters.azureSubscription }}
+    #       container: ${{ parameters.container }}
+    #       environmentName: ${{ parameters.environmentName }}
+    #       poolName: ${{ parameters.poolName }}
+    #       terraformDirectory: ${{ parameters.terraformDirectory }}
+    #       terraformTfVars: ${{ parameters.terraformTfVars }}
+
+    # dependsOn:
+    #   - ${{ each depParent in parameters.parentDependsOn }}:
+    #     - ${{ depParent }}
+    #   - ${{ each dep in parameters.dependsOn }}:
+    #     - ${{ each depEnv in parameters.environmentDependsOn }}:
+    #       - ${{ depEnv }}_${{ dep }}
+    #     - ${{ parameters.environmentName }}_${{ dep }}

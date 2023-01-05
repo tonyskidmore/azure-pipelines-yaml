@@ -1,0 +1,36 @@
+---
+
+parameters:
+  - name: azureSubscription
+    type: string
+  - name: container
+    type: string
+  - name: environmentName
+    type: string
+  - name: poolName
+    type: string
+  - name: terraformDirectory
+    type: string
+  - name: terraformTfVars
+    type: object
+
+jobs:
+  - deployment: terraform_destroy
+    workspace:
+      clean: all
+    # timeoutInMinutes: ${{ parameters.timeoutInMinutes }}
+    pool: ${{ parameters.poolName }}
+    ${{ if gt(length(parameters.container),0) }}:
+      container: ${{ parameters.container }}
+    environment: ${{ parameters.environmentName }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+            - template: ../steps/terraform-destroy.yml
+              parameters:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                environmentName: ${{ parameters.environmentName }}
+                terraformDirectory: ${{ parameters.terraformDirectory }}
+                terraformTfVars: ${{ parameters.terraformTfVars }}

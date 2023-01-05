@@ -1,0 +1,88 @@
+---
+
+parameters:
+  - name: azureSubscription
+    type: string
+  # - name: beStorageAccountName
+  #   type: string
+  # - name: beContainerName
+  #   type: string
+  # - name: beKey
+  #   type: string
+  # - name: beResourceGroupName
+  #   type: string
+  # - name: beSubscriptionId
+  #   type: string
+  - name: destroyMode
+    type: boolean
+  - name: destroyModeLocal
+    type: boolean
+  - name: environmentName
+    type: string
+  - name: environmentParameters
+    type: object
+  - name: terraformDirectory
+    type: string
+  - name: checkout
+    type: object
+  - name: terraformTfVars
+    type: object
+  - name: terraformVersion
+    type: string
+
+steps:
+
+  - ${{ if gt(length(parameters.checkout), 1) }}:
+    - ${{ each repo in parameters.checkout }}:
+      - checkout: ${{ repo }}
+  - ${{ else }}:
+    - checkout: self
+
+  - script: |
+      env
+      ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+    displayName: Debug
+    env:
+      ${{ parameters.terraformTfVars}}
+
+  - script: |
+      set -e
+      # get compact JSON of environmentParameters, strip out dependsOn as it is not needed and will cause an error
+      compact_json=$(jq  --compact-output -r 'del(.dependsOn)' <<< "$JSON")
+      echo "$compact_json"
+      echo "##vso[task.setvariable variable=ENV_PARAMS;]$compact_json"
+    displayName: Get environmentParameters
+    env:
+      JSON: ${{ convertToJson(parameters.environmentParameters) }}
+
+  - task: Bash@3
+    inputs:
+      filePath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-install.sh'
+      arguments: '${{ parameters.terraformVersion }}'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
+    displayName: 'Install Terraform: ${{ parameters.terraformVersion }}'
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '${{ parameters.azureSubscription }}'
+      scriptType: 'bash'
+      scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-auth.sh'
+      arguments: '${{ parameters.terraformDirectory }}'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
+      addSpnToEnvironment: true
+    displayName: 'Terraform authentication'
+    condition: gt(length('${{ parameters.azureSubscription }}'), 0)
+    env:
+      ${{ parameters.terraformTfVars}}
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '${{ parameters.azureSubscription }}'
+      scriptType: 'bash'
+      scriptPath: '$(System.DefaultWorkingDirectory)/pipelines/terraform/scripts/terraform-init.sh'
+      arguments: '${{ parameters.terraformDirectory }} ${{ parameters.destroyMode }} ${{ parameters.destroyModeLocal }}'
+      workingDirectory: '${{ parameters.terraformDirectory }}'
+      addSpnToEnvironment: true
+    displayName: 'Run terraform init'
+    env:
+      ${{ parameters.terraformTfVars}}

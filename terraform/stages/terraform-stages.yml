@@ -1,0 +1,74 @@
+---
+
+parameters:
+  - name: azureSubscription
+    type: string
+  # - name: beStorageAccountName
+  #   type: string
+  # - name: beContainerName
+  #   type: string
+  # - name: beKey
+  #   type: string
+  # - name: beResourceGroupName
+  #   type: string
+  # - name: beSubscriptionId
+  #   type: string
+  - name: container
+    type: string
+  - name: destroyMode
+    type: boolean
+  - name: destroyModeLocal
+    type: boolean
+  - name: poolName
+    type: string
+  - name: environment
+    type: string
+  - name: environmentName
+    type: string
+  - name: environmentDependsOn
+    type: object
+  - name: environmentParameters
+    type: object
+  - name: dependsOn
+    type: object
+  - name: initCheckout
+    type: object
+  - name: stages
+    type: object
+  - name: stageParameters
+    type: object
+  - name: terraformDirectory
+    type: string
+  - name: terraformTfVars
+    type: object
+  - name: terraformVersion
+    type: string
+
+stages:
+
+  - ${{ each stage in parameters.stages }}:
+    - template: ../stages/terraform-run-stage.yml
+      parameters:
+        azureSubscription: ${{ parameters.azureSubscription }}
+        # beStorageAccountName: ${{ parameters.beStorageAccountName }}
+        # beContainerName: ${{ parameters.beContainerName }}
+        # beKey: ${{ parameters.beKey }}
+        # beResourceGroupName: ${{ parameters.beResourceGroupName }}
+        # beSubscriptionId: ${{ parameters.beSubscriptionId }}
+        container: ${{ parameters.container }}
+        destroyMode: ${{ parameters.destroyMode }}
+        destroyModeLocal: ${{ parameters.destroyModeLocal }}
+        poolName: ${{ parameters.poolName }}
+        stage: ${{ stage }}
+        stageName: ${{ parameters.stageParameters[stage].stageName }}
+        environment: ${{ parameters.environment }}
+        environmentName: ${{ parameters.environmentName }}
+        environmentDependsOn: ${{ parameters.environmentDependsOn }}
+        environmentParameters: ${{ parameters.environmentParameters }}
+        condition: ${{ parameters.stageParameters[stage].condition }}
+        parentDependsOn: ${{ parameters.dependsOn }}
+        dependsOn: ${{ parameters.stageParameters[stage].dependsOn }}
+        initCheckout: ${{ parameters.initCheckout }}
+        terraformDirectory: ${{ parameters.terraformDirectory }}
+        terraformTfVars: ${{ parameters.terraformTfVars }}
+        terraformVersion: ${{ parameters.terraformVersion }}
