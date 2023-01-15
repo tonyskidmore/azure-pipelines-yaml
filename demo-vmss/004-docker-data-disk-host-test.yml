@@ -40,6 +40,13 @@ jobs:
         displayName: Check instance
 
       - script: |
+          echo "lsblk output:"
+          lsblk -o NAME,HCTL,SIZE,MOUNTPOINT | grep -i "sd"
+          echo "mount output:"
+          mount -l | grep -i "sd"
+        displayName: Show disk configuration
+
+      - script: |
           set -e
           expected_path="/opt/data/docker"
           printf "Running on %s\n" "$(hostname)"
