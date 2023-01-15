@@ -44,6 +44,7 @@ jobs:
           expected_path="/opt/data/docker"
           printf "Running on %s\n" "$(hostname)"
           printf "Running as %s\n" "$(whoami)"
+
           data_root=$(docker info -f '{{ .DockerRootDir}}')
           if [[ "$expected_path" == "$data_root" ]]
           then
@@ -53,3 +54,19 @@ jobs:
             exit 1
           fi
         displayName: Check Docker data-root path
+
+      - script: |
+          set -e
+          expected_path="/opt/data/docker"
+          printf "Docker data-root disk usage\n"
+          sudo du -sh "$expected_path"
+
+          docker system prune --all --force
+          # TRIM/UNMAP support for Linux in Azure
+          # https://learn.microsoft.com/en-us/azure/virtual-machines/linux/attach-disk-portal?tabs=ubuntu#trimunmap-support-for-linux-in-azure
+          sudo fstrim --verbose "$expected_path"
+
+          printf "Docker data-root disk usage\n"
+          sudo du -sh "$expected_path"
+
+        displayName: Docker and disk cleanup
