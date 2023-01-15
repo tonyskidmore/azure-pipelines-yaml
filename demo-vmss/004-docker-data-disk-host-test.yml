@@ -65,15 +65,16 @@ jobs:
       - script: |
           set -e
           expected_path="/opt/data/docker"
-          printf "Docker data-root disk usage\n"
+          printf "Docker data-root disk usage before cleanup:\n"
           sudo du -sh "$expected_path"
 
+          printf "\nRunning docker system prune and fstrim\n"
           docker system prune --all --force
           # TRIM/UNMAP support for Linux in Azure
           # https://learn.microsoft.com/en-us/azure/virtual-machines/linux/attach-disk-portal?tabs=ubuntu#trimunmap-support-for-linux-in-azure
           sudo fstrim --verbose "$expected_path"
 
-          printf "Docker data-root disk usage\n"
+          printf "Docker data-root disk usage after cleanup:\n"
           sudo du -sh "$expected_path"
 
         displayName: Docker and disk cleanup
