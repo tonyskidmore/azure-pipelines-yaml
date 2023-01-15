@@ -1,21 +1,15 @@
 ---
 
-name: "container-test"
+name: "host-test"
 
 trigger: none
 
 variables:
 - group: build
-- name: containerImage
-  value: "ubuntu:22.04"
 
 pool:
   name: 'vmss-agent-pool-linux-004'
 
-resources:
-  containers:
-    - container: ubuntu
-      image: '${{ variables.containerImage }}'
 
 jobs:
   - job: test
@@ -27,7 +21,6 @@ jobs:
           INSTANCE: '2'
     displayName: "Test Container Job"
     continueOnError: false
-    container: ubuntu
 
     steps:
 
@@ -45,3 +38,18 @@ jobs:
       - script: |
           printf "INSTANCE: %s\n" "$INSTANCE"
         displayName: Check instance
+
+      - script: |
+          set -e
+          expected_path="/opt/data/docker"
+          printf "Running on %s\n" "$(hostname)"
+          printf "Running as %s\n" "$(whoami)"
+          data_root=$(docker info -f '{{ .DockerRootDir}}')
+          if [[ "$expected_path" == "$data_root"]]
+          then
+            printf "Successfully confirmed data-root as: %s\n" "$data_root"
+          else
+            printf "Failed to confirm expected data-root as: %s\n" "$data_root"
+            exit 1
+          fi
+        displayName: Check Docker data-root path
