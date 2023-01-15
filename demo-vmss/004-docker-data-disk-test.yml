@@ -14,14 +14,20 @@ pool:
 
 resources:
   containers:
-    - container: ubuntu20_04
+    - container: ubuntu
       image: '${{ variables.containerImage }}'
 
 jobs:
   - job: test
+    strategy:
+      matrix:
+        host1:
+          INSTANCE: '1'
+        host2:
+          INSTANCE: '2'
     displayName: "Test Container Job"
     continueOnError: false
-    container: ubuntu20_04
+    container: ubuntu
 
     steps:
 
@@ -37,5 +43,20 @@ jobs:
         displayName: Check operating system version
 
       - script: |
-          echo "Build index: $(build_index)"
-        displayName: Check build index
+          printf "INSTANCE: %s\n" "$INSTANCE"
+        displayName: Check instance
+
+      - script: |
+          set -e
+          expected_path="/opt/data/docker"
+          printf "Running on %s\n" "$(hostname)"
+          printf "Running as %s\n" "$(whoami)"
+          data_root=$(docker info -f '{{ .DockerRootDir}}')
+          if [[ "$expected_path" == "$data_root"]]
+          then
+            printf "Successfully confirmed data-root as: %s\n" "$data_root"
+          else
+            printf "Failed to confirm expected data-root as: %s\n" "$data_root"
+            exit 1
+          fi
+        displayName: Check Docker data-root path
