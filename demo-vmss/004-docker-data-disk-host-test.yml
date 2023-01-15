@@ -19,7 +19,7 @@ jobs:
           INSTANCE: '1'
         host2:
           INSTANCE: '2'
-    displayName: "Test Container Job"
+    displayName: "Test Host Job"
     continueOnError: false
 
     steps:
@@ -45,7 +45,7 @@ jobs:
           printf "Running on %s\n" "$(hostname)"
           printf "Running as %s\n" "$(whoami)"
           data_root=$(docker info -f '{{ .DockerRootDir}}')
-          if [[ "$expected_path" == "$data_root"]]
+          if [[ "$expected_path" == "$data_root" ]]
           then
             printf "Successfully confirmed data-root as: %s\n" "$data_root"
           else
