@@ -30,7 +30,7 @@ stages:
       destroyMode: true
     environmentParameters:
       demo:
-        azureSubscription: "demo-vmss"
+        azureSubscription: $(serviceConnection)
         beStorageAccountName: $(state_storage_account_name)
         beContainerName: $(state_container_name)
         beKey: "azure-ai-demo.tfstate"
