@@ -42,7 +42,7 @@ stages:
       - self
       - git://$(project)/module
     poolName: 'vmss-bootstrap-pool'
-    terraformDirectory: '$(System.DefaultWorkingDirectory)/azure-ai-demo/terraform'
+    terraformDirectory: '$(System.DefaultWorkingDirectory)/ai-demo-src/terraform'
     terraformTfVars:
       AZ_SUBSCRIPTION: $(azurerm_subscription_id)
       AZDO_PERSONAL_ACCESS_TOKEN: $(ado_ext_pat)
