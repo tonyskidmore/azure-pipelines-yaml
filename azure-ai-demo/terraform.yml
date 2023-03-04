@@ -40,7 +40,7 @@ stages:
         environmentName: "demo"
     initCheckout:
       - self
-      - git://$(project)/module
+      - git://$(project)/ai-demo-src
     poolName: 'vmss-bootstrap-pool'
     terraformDirectory: '$(System.DefaultWorkingDirectory)/ai-demo-src/terraform'
     terraformTfVars:
