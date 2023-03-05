@@ -55,16 +55,24 @@ stages:
       TF_VAR_serviceprincipalkey: $(serviceprincipalkey)
 
 - stage: app
-  condition:  and(succeeded(), ne(parameters.operation, 'terraform-destroy'))
+  condition:  and(succeeded(), ne('${{ parameters.operation }}', 'terraform-destroy'))
+  pool:
+    name: 'vmss-bootstrap-pool'
   variables:
-    acrName: "azureaidemo"
-    DOCKER_BUILDKIT: 1
+    - name: acrName
+      value: "azureaidemo"
+    - name: DOCKER_BUILDKIT
+      value: 1
   jobs:
   - job: build
-  
+    workspace:
+      clean: all
+    displayName: "Build and push container"
+    continueOnError: false
     steps:
 
       - checkout: self
+
       - checkout: git://$(project)/ai-demo-src
 
       - script: |
@@ -75,7 +83,7 @@ stages:
       - script: |
           set -e
           az login --service-principal -u $(serviceprincipalid) -p $(serviceprincipalkey) --tenant $(azurerm_spn_tenantid)
-          az acr login -n $(acrName) --subscription $(subscriptionId)
+          az acr login -n $(acrName) --subscription $(azurerm_subscription_id)
         displayName: Login
 
       - script: |
