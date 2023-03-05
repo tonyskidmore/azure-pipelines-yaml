@@ -55,6 +55,7 @@ stages:
       TF_VAR_serviceprincipalkey: $(serviceprincipalkey)
 
 - stage: app
+  condition:  and(succeeded(), ne(parameters.operation, 'terraform-destroy'))
   variables:
     acrName: "azureaidemo"
     DOCKER_BUILDKIT: 1
@@ -62,6 +63,9 @@ stages:
   - job: build
   
     steps:
+
+      - checkout: self
+      - checkout: git://$(project)/ai-demo-src
 
       - script: |
           env
