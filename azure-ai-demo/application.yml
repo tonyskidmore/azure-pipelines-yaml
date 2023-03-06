@@ -2,8 +2,6 @@
 
 name: "application"
 
-trigger: none
-
 resources:
   pipelines:
   - pipeline: application
