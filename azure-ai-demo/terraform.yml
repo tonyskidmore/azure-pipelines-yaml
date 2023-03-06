@@ -44,12 +44,13 @@ stages:
     poolName: 'vmss-bootstrap-pool'
     terraformDirectory: '$(System.DefaultWorkingDirectory)/ai-demo-src/terraform'
     terraformTfVars:
-      AZ_SUBSCRIPTION: $(azurerm_subscription_id)
-      AZDO_PERSONAL_ACCESS_TOKEN: $(ado_ext_pat)
-      AZDO_ORG_SERVICE_URL: $(ado_org)
-      TF_VAR_ado_ext_pat: $(ado_ext_pat)
-      TF_VAR_ado_org: $(ado_org)
-      TF_VAR_azurerm_subscription_id: $(azurerm_subscription_id)
-      TF_VAR_azurerm_spn_tenantid: $(azurerm_spn_tenantid)
-      TF_VAR_serviceprincipalid: $(serviceprincipalid)
-      TF_VAR_serviceprincipalkey: $(serviceprincipalkey)
+      TF_VAR_openai_api_key: $(openai_api_key)
+      # AZ_SUBSCRIPTION: $(azurerm_subscription_id)
+      # AZDO_PERSONAL_ACCESS_TOKEN: $(ado_ext_pat)
+      # AZDO_ORG_SERVICE_URL: $(ado_org)
+      # TF_VAR_ado_ext_pat: $(ado_ext_pat)
+      # TF_VAR_ado_org: $(ado_org)
+      # TF_VAR_azurerm_subscription_id: $(azurerm_subscription_id)
+      # TF_VAR_azurerm_spn_tenantid: $(azurerm_spn_tenantid)
+      # TF_VAR_serviceprincipalid: $(serviceprincipalid)
+      # TF_VAR_serviceprincipalkey: $(serviceprincipalkey)
