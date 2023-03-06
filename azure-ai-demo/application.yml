@@ -12,10 +12,6 @@ resources:
 
 variables:
 - group: build
-- name: serviceConnection
-  value: "azure-ai-demo"
-- name: acrName
-  value: "azureaidemo"
 - name: DOCKER_BUILDKIT
   value: 1
 
@@ -25,8 +21,6 @@ pool:
 stages:
 
 - stage: app
-  pool:
-    name: 'vmss-bootstrap-pool'
 
   jobs:
   - job: build
@@ -42,18 +36,19 @@ stages:
 
       - script: |
           env
-          nslookup $(acrName).azurecr.io || echo "nslookup failed"
         displayName: Debug
 
       - script: |
           set -e
           az login --service-principal -u $(serviceprincipalid) -p $(serviceprincipalkey) --tenant $(azurerm_spn_tenantid)
-          az acr login -n $(acrName) --subscription $(azurerm_subscription_id)
+          acr_name=$(az acr list --resource-group rg-azure-ai-demo --query "[0].name")
+          az acr login -n "$acr_name" --subscription $(azurerm_subscription_id)
+          echo "##vso[task.setvariable variable=ACR]$acr_name"
         displayName: Login
 
       - script: |
           set -e
           docker build -t "$(acrName).azurecr.io/azureaidemo/azureaidemo:latest" .
-          docker push "$(acrName).azurecr.io/azureaidemo/azureaidemo:latest" 
+          docker push "${ACR}.azurecr.io/azureaidemo/azureaidemo:latest"
         displayName: Docker build and push
         workingDirectory: '$(System.DefaultWorkingDirectory)/ai-demo-src/src'
