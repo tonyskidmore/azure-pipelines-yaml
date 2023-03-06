@@ -49,7 +49,7 @@ stages:
 
       - script: |
           set -e
-          docker build -t "$(acrName).azurecr.io/azureaidemo/azureaidemo:latest" .
+          docker build -t "${ACR}.azurecr.io/azureaidemo/azureaidemo:latest" .
           docker push "${ACR}.azurecr.io/azureaidemo/azureaidemo:latest"
         displayName: Docker build and push
         workingDirectory: '$(System.DefaultWorkingDirectory)/ai-demo-src/src'
