@@ -41,7 +41,8 @@ stages:
       - script: |
           set -e
           az login --service-principal -u $(serviceprincipalid) -p $(serviceprincipalkey) --tenant $(azurerm_spn_tenantid)
-          acr_name=$(az acr list --resource-group rg-azure-ai-demo --query "[0].name")
+          acr_name=$(az acr list --resource-group $(resource_group) --query "[0].name")
+          printf "ACR name: %s\n" "$acr_name"
           az acr login -n "$acr_name" --subscription $(azurerm_subscription_id)
           echo "##vso[task.setvariable variable=ACR]$acr_name"
         displayName: Login
