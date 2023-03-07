@@ -2,8 +2,8 @@
 
 name: "application"
 
-# trigger: none
-# pr: none
+trigger:
+- main
 
 resources:
   pipelines:
