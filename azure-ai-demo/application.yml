@@ -55,5 +55,6 @@ stages:
       - script: |
           set -e
           app_name=$(az webapp list --resource-group $(resource_group) --query "[0].name" -o tsv)
+          printf "Restarting web app %s in resource group %s\n" "$app_name" "$(resource_group)"
           az webapp restart --name "$app_name" --resource-group "$(resource_group)"
         displayName: Restart web application
