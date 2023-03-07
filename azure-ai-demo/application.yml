@@ -6,7 +6,11 @@ resources:
   pipelines:
   - pipeline: application
     source: terraform
-    trigger: true
+    # trigger: true
+    trigger:
+      branches:
+        include: 
+        - refs/heads/main
 
 variables:
 - group: build
