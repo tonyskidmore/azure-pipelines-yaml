@@ -10,9 +10,7 @@ resources:
   - pipeline: application
     source: terraform
     branch: main
-    trigger:
-      branches:
-      - '*'
+    trigger: true
 
 variables:
 - group: build
