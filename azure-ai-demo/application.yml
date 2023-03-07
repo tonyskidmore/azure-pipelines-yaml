@@ -68,4 +68,4 @@ stages:
             --docker-custom-image-name "${ACR}.azurecr.io/${APP}/${APP}:$BUILD_BUILDID"
           printf "Restarting web app %s in resource group %s\n" "${APP}" "$(resource_group)"
           az webapp restart --name "${APP}" --resource-group "$(resource_group)"
-        displayName: Restart web application
+        displayName: Configure and restart web application
