@@ -9,7 +9,6 @@ resources:
   pipelines:
   - pipeline: application
     source: terraform
-    branch: main
     trigger: true
 
 variables:
