@@ -54,7 +54,7 @@ stages:
       - script: |
           set -e
           docker build -t "${ACR}.azurecr.io/${APP}/${APP}:latest" .
-          docker tag "${ACR}.azurecr.io/$(project)/$(project):latest" "${ACR}.azurecr.io/${APP}/${APP}:$BUILD_BUILDID"
+          docker tag "${ACR}.azurecr.io/${APP}/${APP}:latest" "${ACR}.azurecr.io/${APP}/${APP}:$BUILD_BUILDID"
           docker push "${ACR}.azurecr.io/${APP}/${APP}:latest"
           docker push "${ACR}.azurecr.io/${APP}/${APP}:$BUILD_BUILDID"
         displayName: Docker build and push
@@ -62,7 +62,6 @@ stages:
 
       - script: |
           set -e
-          app_name=$(az webapp list --resource-group $(resource_group) --query "[0].name" -o tsv)
           printf "Setting web app container to %s in resource group %s\n" "${ACR}.azurecr.io/${APP}/${APP}:$BUILD_BUILDID" "$(resource_group)"
           az webapp config container set \
             --resource-group "$(resource_group)" \
