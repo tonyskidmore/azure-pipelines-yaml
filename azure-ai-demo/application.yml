@@ -2,18 +2,17 @@
 
 name: "application"
 
-trigger: none
-pr: none
+# trigger: none
+# pr: none
 
 resources:
   pipelines:
   - pipeline: application
     source: terraform
-    # trigger: true
+    branch: main
     trigger:
       branches:
-        include:
-        - refs/heads/main
+      - '*'
 
 variables:
 - group: build
