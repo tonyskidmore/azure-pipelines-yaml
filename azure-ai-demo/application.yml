@@ -9,7 +9,7 @@ resources:
     # trigger: true
     trigger:
       branches:
-        include: 
+        include:
         - refs/heads/main
 
 variables:
