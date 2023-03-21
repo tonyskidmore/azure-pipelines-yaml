@@ -39,7 +39,8 @@ stages:
         environmentName: "demo"
     initCheckout:
       - self
-      - git://$(project)/module
+      # TODO: revert to main
+      - git://$(project)/module@refs/heads/example_005
     poolName: 'vmss-bootstrap-pool'
     terraformDirectory: '$(System.DefaultWorkingDirectory)/module/examples/005-additional_packages'
     terraformTfVars:
