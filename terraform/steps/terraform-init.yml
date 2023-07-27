@@ -43,7 +43,7 @@ steps:
       # get compact JSON of environmentParameters, strip out dependsOn as it is not needed and will cause an error
       compact_json=$(jq  --compact-output -r 'del(.dependsOn)' <<< "$JSON")
       echo "$compact_json"
-      environment_name=$(echo "$compact_json" | jq -r '.environmentName' > /dev/null 2>&1)
+      environment_name=$(echo "$compact_json" | jq -r '.environmentName')
       echo "##vso[task.setvariable variable=ENV_PARAMS;]$compact_json"
       if [[ -n "$environment_name" ]]
       then
