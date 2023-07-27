@@ -39,21 +39,27 @@ steps:
     - checkout: self
 
   - script: |
+      set -e
+      # get compact JSON of environmentParameters, strip out dependsOn as it is not needed and will cause an error
+      compact_json=$(jq  --compact-output -r 'del(.dependsOn)' <<< "$JSON")
+      echo "$compact_json"
+      environment_name=$(echo "$compact_json" | jq -r '.environmentName' > /dev/null 2>&1)
+      echo "##vso[task.setvariable variable=ENV_PARAMS;]$compact_json"
+      if [[ -n "$environment_name" ]]
+      then
+        echo "TF_VAR_environment_name=$environment_name"
+        echo "##vso[task.setvariable variable=TF_VAR_environment_name;]$environment_name"
+      fi
+    displayName: Get environmentParameters
+    env:
+      JSON: ${{ convertToJson(parameters.environmentParameters) }}
+
+  - script: |
       env
       ls "$SYSTEM_DEFAULTWORKINGDIRECTORY"
     displayName: Debug
     env:
       ${{ parameters.terraformTfVars}}
-
-  - script: |
-      set -e
-      # get compact JSON of environmentParameters, strip out dependsOn as it is not needed and will cause an error
-      compact_json=$(jq  --compact-output -r 'del(.dependsOn)' <<< "$JSON")
-      echo "$compact_json"
-      echo "##vso[task.setvariable variable=ENV_PARAMS;]$compact_json"
-    displayName: Get environmentParameters
-    env:
-      JSON: ${{ convertToJson(parameters.environmentParameters) }}
 
   - task: Bash@3
     inputs:

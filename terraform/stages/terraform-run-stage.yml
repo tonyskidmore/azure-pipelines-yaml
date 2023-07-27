@@ -63,8 +63,11 @@ stages:
         - ${{ each depEnv in parameters.environmentDependsOn }}:
           - ${{ each dep in parameters.dependsOn }}:
             - ${{ depEnv }}_${{ dep }}
+          - ${{ depEnv }}_apply
       - ${{ each dep in parameters.dependsOn }}:
         - ${{ parameters.environmentName }}_${{ dep }}
+      # - ${{ if gt(length(parameters.environmentDependsOn),0) }}:
+      #   - 'dev_apply'
     ${{ if gt(length(parameters.condition),0) }}:
       condition: ${{ parameters.condition }}
     ${{ elseif eq(parameters.stageName, 'apply') }}:
