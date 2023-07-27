@@ -114,7 +114,7 @@ install_teraform() {
 
 
 tf_require_version=$1
-tf_dest="/usr/local/bin"
+tf_dest="/usr/local/bin/terraform"
 
 if [[ "$tf_require_version" == "latest" ]]
 then
@@ -145,15 +145,18 @@ printf "Terraform version to install: %s\n"  "$tf_install_version"
 if [[ "$tf_version" == "$tf_install_version" ]] || [[ "$tf_require_version" == "latest" && "$tf_version" == "$tf_latest_version" ]]
 then
   echo "Currently installed Terraform satisfies requirements"
+  tf_dest=$(command -v terraform)
+  echo "Setting tf_dest: $tf_dest"
 else
   echo "Currently installed Terraform does not satisfy requirements, installing "
   install_teraform "$tf_install_version"
 fi
 
+# TODO: required for apply stage that expects terraform in cache
 if [[ -n "$SYSTEM_DEFAULTWORKINGDIRECTORY" ]]
 then
   printf "Copying terraform to %s\n" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
-  sudo cp "${tf_dest}/terraform" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
+  sudo cp "${tf_dest}" "$SYSTEM_DEFAULTWORKINGDIRECTORY"
 fi
 
 terraform version -json
