@@ -9,6 +9,9 @@ parameters:
     type: string
   - name: poolName
     type: string
+  - name: preApplySteps
+    type: stepList
+    default: []
   - name: terraformDirectory
     type: string
   - name: terraformTfVars
@@ -32,5 +35,6 @@ jobs:
               parameters:
                 azureSubscription: ${{ parameters.azureSubscription }}
                 environmentName: ${{ parameters.environmentName }}
+                preApplySteps: ${{ parameters.preApplySteps }}
                 terraformDirectory: ${{ parameters.terraformDirectory }}
                 terraformTfVars: ${{ parameters.terraformTfVars }}

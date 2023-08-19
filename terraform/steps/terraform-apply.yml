@@ -9,6 +9,9 @@ parameters:
     type: string
   - name: terraformTfVars
     type: object
+  - name: preApplySteps
+    type: stepList
+    default: []
 
 steps:
 
@@ -38,6 +41,10 @@ steps:
     condition: gt(length('${{ parameters.azureSubscription }}'), 0)
     env:
       ${{ parameters.terraformTfVars}}
+
+  - ${{ each step in parameters.preDestroySteps }}:
+    - ${{ each pair in step }}:
+          ${{ pair.key }}: ${{ pair.value }}
 
   - task: AzureCLI@2
     inputs:

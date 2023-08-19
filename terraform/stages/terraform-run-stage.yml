@@ -37,6 +37,9 @@ parameters:
     type: object
   - name: condition
     type: string
+  - name: preApplySteps
+    type: stepList
+    default: []
   - name: stage
     type: string
   - name: stageName
@@ -47,6 +50,7 @@ parameters:
     type: object
   - name: terraformVersion
     type: string
+
 
 
 stages:
@@ -105,6 +109,7 @@ stages:
           container: ${{ parameters.container }}
           environmentName: ${{ parameters.environmentName }}
           poolName: ${{ parameters.poolName }}
+          preApplySteps: ${{ parameters.preApplySteps }}
           terraformDirectory: ${{ parameters.terraformDirectory }}
           terraformTfVars: ${{ parameters.terraformTfVars }}
     # - ${{ if eq(parameters['stage'], 'destroy') }}:

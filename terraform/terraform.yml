@@ -78,6 +78,7 @@ parameters:
         #           #     eq(variables['Build.SourceBranch'], 'refs/heads/master'),
         #           #     eq('${{ parameters.tfApplyForceBranch }}', true)
         #           # )
+        # preApplySteps:
       destroy:
         dependsOn: [init_plan]
         stageName: "destroy"
