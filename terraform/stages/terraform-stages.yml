@@ -67,7 +67,7 @@ stages:
         environmentParameters: ${{ parameters.environmentParameters }}
         condition: ${{ parameters.stageParameters[stage].condition }}
         parentDependsOn: ${{ parameters.dependsOn }}
-        if ${{ parameters.stageParameters[stage].preApplySteps }}:
+        ${{ if parameters.stageParameters[stage].preApplySteps }}:
           preApplySteps: ${{ parameters.stageParameters[stage].preApplySteps }}
         dependsOn: ${{ parameters.stageParameters[stage].dependsOn }}
         initCheckout: ${{ parameters.initCheckout }}

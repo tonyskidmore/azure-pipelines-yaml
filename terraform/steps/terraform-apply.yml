@@ -42,7 +42,7 @@ steps:
     env:
       ${{ parameters.terraformTfVars}}
 
-  - ${{ each step in parameters.preDestroySteps }}:
+  - ${{ each step in parameters.preApplySteps }}:
     - ${{ each pair in step }}:
           ${{ pair.key }}: ${{ pair.value }}
 
